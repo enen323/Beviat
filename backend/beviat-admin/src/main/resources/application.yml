@@ -3,14 +3,14 @@ server:
   servlet:
     context-path: /api/v1
 
-spring:
+spring   春天:
   application:
     name: beviat
 
   datasource:
     url: jdbc:mysql://localhost:3306/beviat?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
     username: root
-    password: 1234
+    password  root
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 20
