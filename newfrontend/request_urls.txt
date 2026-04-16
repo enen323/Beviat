@@ -1,0 +1,26 @@
+# 前端项目请求地址收集
+
+## 基础URL
+- 基础路径: /api/v1
+
+## 认证相关API
+- POST /auth/login - 登录
+- POST /auth/register - 注册
+- POST /auth/refresh - 刷新Token
+- GET /auth/me - 获取当前用户信息
+- POST /auth/logout - 退出登录
+
+## 商品相关API
+- GET /products - 商品列表（分页+筛选）
+- GET /products/{id} - 商品详情
+- POST /products - 发布商品
+- PUT /products/{id} - 更新商品
+- DELETE /products/{id} - 删除商品
+- PUT /products/{id}/status - 上架/下架
+- POST /favorites/toggle - 收藏/取消收藏
+
+## 聊天相关API
+- GET /chats - 获取聊天列表
+- GET /chats/messages/{userId} - 获取聊天记录
+- POST /chats/send - 发送消息
+- PUT /chats/read/{senderId} - 标记消息已读

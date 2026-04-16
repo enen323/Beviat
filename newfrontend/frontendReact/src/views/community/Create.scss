@@ -1,0 +1,115 @@
+.create-post-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: $spacing-4 $spacing-4 $spacing-8;
+
+  .create-post-back {
+    margin-bottom: $spacing-4;
+
+    .ant-btn {
+      color: $text-secondary;
+      font-size: $font-size-sm;
+
+      &:hover {
+        color: $apple-blue;
+      }
+    }
+  }
+
+  .create-post-card {
+    padding: $spacing-8;
+
+    .create-post-title {
+      font-family: $font-display;
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-semibold;
+      letter-spacing: $letter-spacing-sm;
+      margin-bottom: $spacing-6;
+    }
+
+    .create-post-form {
+      .ant-form-item-label > label {
+        font-weight: $font-weight-medium;
+        color: $text-primary;
+      }
+
+      .ant-input,
+      .ant-input-textarea textarea {
+        border-radius: $radius-md;
+        border: 1px solid $color-gray-200;
+        font-size: $font-size-base;
+
+        &:focus,
+        &.ant-input-affix-wrapper-focused {
+          border-color: $apple-blue;
+          box-shadow: 0 0 0 2px rgba($apple-blue, 0.1);
+        }
+      }
+
+      .ant-radio-group {
+        .ant-radio-button-wrapper {
+          border-radius: $radius-full;
+          border: 1px solid $color-gray-200;
+
+          &::before {
+            display: none;
+          }
+
+          &:first-child {
+            border-radius: $radius-full;
+          }
+
+          &:last-child {
+            border-radius: $radius-full;
+          }
+
+          &.ant-radio-button-wrapper-checked {
+            background: $apple-blue;
+            border-color: $apple-blue;
+          }
+        }
+      }
+
+      .ant-upload-wrapper {
+        .ant-upload-list-picture-card-container {
+          .ant-upload-list-item {
+            border-radius: $radius-base;
+          }
+        }
+
+        .ant-upload.ant-upload-select {
+          border-radius: $radius-base;
+          border: 1px dashed $color-gray-300;
+          transition: border-color $transition-fast;
+
+          &:hover {
+            border-color: $apple-blue;
+          }
+        }
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: $spacing-3;
+        padding-top: $spacing-4;
+
+        .ant-btn {
+          height: $btn-height;
+          border-radius: $radius-base;
+          min-width: 100px;
+        }
+
+        .ant-btn-primary {
+          background: $apple-blue;
+          border-color: $apple-blue;
+
+          &:hover {
+            background: $apple-blue-bright;
+            border-color: $apple-blue-bright;
+          }
+        }
+      }
+    }
+  }
+}

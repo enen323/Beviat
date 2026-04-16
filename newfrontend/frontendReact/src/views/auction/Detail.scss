@@ -1,0 +1,280 @@
+.auction-detail {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-4 $spacing-4 $spacing-8;
+
+  .auction-detail-back {
+    margin-bottom: $spacing-4;
+
+    .ant-btn {
+      color: $text-secondary;
+      font-size: $font-size-sm;
+
+      &:hover {
+        color: $apple-blue;
+      }
+    }
+  }
+
+  .auction-detail-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+  }
+
+  .auction-detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: $spacing-6;
+    align-items: start;
+
+    @media (max-width: $breakpoint-lg - 1px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // Left: Product Info
+  .auction-detail-product {
+    .product-images {
+      border-radius: $radius-xl;
+      overflow: hidden;
+      margin-bottom: $spacing-5;
+      background: $color-gray-100;
+
+      .product-image-item {
+        aspect-ratio: 4/3;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+
+      .product-image-placeholder {
+        aspect-ratio: 4/3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $color-gray-100;
+        border-radius: $radius-xl;
+      }
+
+      .carousel-dots {
+        bottom: 12px;
+
+        li {
+          button {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: $radius-full;
+          }
+        }
+      }
+    }
+
+    .product-info-section {
+      .product-title {
+        font-family: $font-display;
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-semibold;
+        letter-spacing: $letter-spacing-sm;
+        margin-bottom: $spacing-3;
+      }
+
+      .product-description {
+        font-size: $font-size-base;
+        color: $text-secondary;
+        line-height: $line-height-relaxed;
+        margin-bottom: $spacing-4;
+      }
+
+      .product-condition {
+        display: flex;
+        align-items: center;
+        gap: $spacing-2;
+
+        .label {
+          font-size: $font-size-sm;
+          color: $text-tertiary;
+        }
+      }
+    }
+  }
+
+  // Right: Auction Info
+  .auction-detail-info {
+    position: sticky;
+    top: $spacing-6;
+
+    .auction-status-card {
+      padding: $spacing-5;
+      margin-bottom: $spacing-4;
+
+      .status-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-4;
+
+        .status-badge {
+          font-size: $font-size-sm;
+        }
+
+        .countdown {
+          display: flex;
+          align-items: center;
+          gap: $spacing-1;
+          font-size: $font-size-sm;
+          color: $color-warning;
+          font-weight: $font-weight-medium;
+        }
+      }
+
+      .price-section {
+        margin-bottom: $spacing-5;
+
+        .current-price-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          margin-bottom: $spacing-3;
+
+          .label {
+            font-size: $font-size-sm;
+            color: $text-tertiary;
+          }
+
+          .current-price {
+            font-size: $font-size-3xl;
+            font-weight: $font-weight-bold;
+            color: $color-error;
+          }
+        }
+
+        .start-price-row,
+        .bid-info-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: $spacing-2 0;
+          border-bottom: 1px solid $color-gray-100;
+
+          .label {
+            font-size: $font-size-sm;
+            color: $text-tertiary;
+          }
+
+          .start-price,
+          .min-increment,
+          .bid-count {
+            font-size: $font-size-base;
+            font-weight: $font-weight-medium;
+            color: $text-primary;
+          }
+        }
+      }
+
+      .bid-action {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-3;
+
+        .ant-input-number {
+          border-radius: $radius-md;
+          height: $input-height;
+
+          .ant-input-number-input {
+            font-size: $font-size-lg;
+          }
+        }
+
+        .bid-btn {
+          height: $btn-height;
+          border-radius: $radius-base;
+          font-size: $font-size-lg;
+          font-weight: $font-weight-medium;
+          background: $apple-blue;
+          border-color: $apple-blue;
+
+          &:hover {
+            background: $apple-blue-bright;
+            border-color: $apple-blue-bright;
+          }
+        }
+      }
+
+      .bid-login-hint {
+        .ant-btn {
+          height: $btn-height;
+          border-radius: $radius-base;
+          font-size: $font-size-lg;
+        }
+      }
+    }
+
+    .bid-history {
+      padding: $spacing-5;
+
+      .bid-history-title {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+        margin-bottom: $spacing-4;
+        display: flex;
+        align-items: center;
+        gap: $spacing-2;
+      }
+
+      .bid-list {
+        max-height: 360px;
+        overflow-y: auto;
+
+        .bid-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: $spacing-3 0;
+          border-bottom: 1px solid $color-gray-100;
+
+          &.highest {
+            background: rgba($color-warning, 0.05);
+            border-radius: $radius-base;
+            padding: $spacing-3;
+            margin-bottom: $spacing-2;
+          }
+
+          .bid-user {
+            display: flex;
+            align-items: center;
+            gap: $spacing-2;
+
+            .bidder-name {
+              font-size: $font-size-sm;
+              font-weight: $font-weight-medium;
+            }
+
+            .highest-tag {
+              font-size: $font-size-nano;
+            }
+          }
+
+          .bid-amount-time {
+            text-align: right;
+
+            .bid-amount {
+              font-size: $font-size-base;
+              font-weight: $font-weight-semibold;
+              color: $color-error;
+              display: block;
+            }
+
+            .bid-time {
+              font-size: $font-size-xs;
+              color: $text-tertiary;
+            }
+          }
+        }
+      }
+    }
+  }
+}

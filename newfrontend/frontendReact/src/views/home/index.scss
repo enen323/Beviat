@@ -1,0 +1,510 @@
+.home-page {
+  width: 100%;
+}
+
+// Apple Section Inner - 980px 最大内容宽度
+.section-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 $spacing-6;
+}
+
+// ========== Hero Section ==========
+// Apple Product Hero Module - 全宽沉浸式，人文气息背景 + 鼠标视差
+.hero-section {
+  width: 100%;
+  padding: $spacing-24 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+
+  // 视差背景容器 - 比容器更宽以留出移动空间
+  .hero-bg-parallax {
+    position: absolute;
+    top: -30px;
+    left: -60px;
+    right: -60px;
+    bottom: -30px;
+    z-index: 0;
+    will-change: transform;
+    pointer-events: none;
+  }
+
+  // 人文气息场景层 - 远/中/近三层营造深度
+  .hero-bg-scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  // 远景层：暖色城市天际线氛围 - 柔和渐变
+  .hero-bg-scene-far {
+    background:
+      // 天空暖色光晕
+      radial-gradient(ellipse 120% 60% at 30% 80%, rgba(180, 120, 60, 0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 50% at 75% 75%, rgba(200, 150, 80, 0.12) 0%, transparent 65%),
+      // 月光/黄昏微光
+      radial-gradient(circle at 80% 20%, rgba(255, 220, 160, 0.08) 0%, transparent 40%),
+      // 基底暖黑
+      linear-gradient(175deg, #0a0806 0%, #1a1410 40%, #0d0a08 100%);
+    opacity: 0.9;
+    animation: heroFarFloat 20s ease-in-out infinite alternate;
+  }
+
+  // 中景层：街灯与人影剪影 - 几何纹理
+  .hero-bg-scene-mid {
+    background:
+      // 模拟远处建筑轮廓的竖向光带
+      repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 80px,
+        rgba(255, 200, 120, 0.03) 80px,
+        rgba(255, 200, 120, 0.03) 82px
+      ),
+      // 模拟窗灯的暖色点
+      radial-gradient(circle 2px at 15% 65%, rgba(255, 210, 140, 0.2) 0%, transparent 100%),
+      radial-gradient(circle 2px at 22% 58%, rgba(255, 210, 140, 0.15) 0%, transparent 100%),
+      radial-gradient(circle 2px at 35% 70%, rgba(255, 210, 140, 0.18) 0%, transparent 100%),
+      radial-gradient(circle 1.5px at 42% 62%, rgba(255, 210, 140, 0.12) 0%, transparent 100%),
+      radial-gradient(circle 2px at 58% 68%, rgba(255, 210, 140, 0.16) 0%, transparent 100%),
+      radial-gradient(circle 1.5px at 65% 55%, rgba(255, 210, 140, 0.1) 0%, transparent 100%),
+      radial-gradient(circle 2px at 72% 72%, rgba(255, 210, 140, 0.14) 0%, transparent 100%),
+      radial-gradient(circle 2px at 85% 60%, rgba(255, 210, 140, 0.18) 0%, transparent 100%),
+      radial-gradient(circle 1.5px at 92% 66%, rgba(255, 210, 140, 0.12) 0%, transparent 100%),
+      // 路灯暖光晕
+      radial-gradient(ellipse 8% 25% at 20% 75%, rgba(255, 190, 100, 0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 8% 25% at 55% 78%, rgba(255, 190, 100, 0.05) 0%, transparent 70%),
+      radial-gradient(ellipse 8% 25% at 82% 73%, rgba(255, 190, 100, 0.07) 0%, transparent 70%);
+    opacity: 0.85;
+    animation: heroMidFloat 15s ease-in-out infinite alternate;
+  }
+
+  // 近景层：柔和光斑与纹理 - 玻璃/织物质感
+  .hero-bg-scene-near {
+    background:
+      // 大面积柔和暖光斑
+      radial-gradient(ellipse 35% 40% at 25% 40%, rgba(255, 180, 100, 0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 35% at 70% 50%, rgba(255, 200, 130, 0.035) 0%, transparent 70%),
+      // 纸张/织物细腻纹理
+      url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='60' height='60' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");
+    opacity: 0.8;
+    animation: heroNearFloat 12s ease-in-out infinite alternate;
+  }
+
+  // 渐变遮罩 - 保证文字可读性
+  .hero-bg-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      // 中心向外的暗角
+      radial-gradient(ellipse 70% 70% at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.4) 100%),
+      // 上下渐变确保文字区域干净
+      linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 30%, transparent 70%, rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 980px;
+    padding: 0 $spacing-6;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-family: $font-display;
+    font-size: $font-size-6xl;
+    font-weight: $font-weight-semibold;
+    line-height: $line-height-tight;
+    letter-spacing: $letter-spacing-hero;
+    color: $text-inverse;
+    margin-bottom: $spacing-4;
+    // 文字微光效果 - 增添人文温度
+    text-shadow: 0 0 60px rgba(255, 200, 130, 0.12);
+  }
+
+  .hero-subtitle {
+    font-family: $font-display;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-normal;
+    line-height: $line-height-card;
+    letter-spacing: $letter-spacing-card;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: $spacing-10;
+    text-shadow: 0 0 40px rgba(255, 200, 130, 0.08);
+  }
+
+  // Apple 双CTA布局
+  .hero-actions {
+    display: flex;
+    gap: $spacing-4;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+// 背景层缓慢浮动动画 - 营造呼吸感
+@keyframes heroFarFloat {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(5px, 2px); }
+}
+
+@keyframes heroMidFloat {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-3px, 4px); }
+}
+
+@keyframes heroNearFloat {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(4px, -2px); }
+}
+
+// Apple Pill CTA - 标志性胶囊按钮
+.cta-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $btn-padding-y $btn-padding-x;
+  border-radius: $radius-full;
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-normal;
+  letter-spacing: $letter-spacing-sm;
+  cursor: pointer;
+  transition: all $transition-fast;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cta-filled {
+  background: $apple-blue;
+  color: $color-white;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: $apple-blue-bright;
+  }
+}
+
+.cta-outline {
+  background: transparent;
+  color: $apple-blue-bright;
+  border: 1px solid $apple-blue-bright;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// ========== Section Header ==========
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-8;
+
+  .section-title {
+    font-family: $font-display;
+    font-size: $font-size-5xl;
+    font-weight: $font-weight-semibold;
+    line-height: 1.10;
+    color: $text-primary;
+  }
+
+  .section-header-right {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+  }
+}
+
+.section-link {
+  font-family: $font-body;
+  font-size: $font-size-sm;
+  color: $apple-blue;
+  letter-spacing: $letter-spacing-sm;
+  cursor: pointer;
+  transition: text-decoration $transition-fast;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// ========== Transition Zone ==========
+// 最新发布 -> 猜你喜欢 过渡区
+.section-transition {
+  position: relative;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: $bg-primary;
+
+  .transition-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      $bg-primary 0%,
+      #0a0a0a 100%
+    );
+    pointer-events: none;
+  }
+
+  .transition-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .transition-title {
+    font-family: $font-display;
+    font-size: $font-size-5xl;
+    font-weight: $font-weight-semibold;
+    color: $color-white;
+    line-height: 1.1;
+    margin-bottom: $spacing-3;
+    text-shadow: 0 0 60px rgba(255, 200, 130, 0.12);
+  }
+
+  .transition-subtitle {
+    font-family: $font-display;
+    font-size: $font-size-lg;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: $letter-spacing-sm;
+  }
+}
+
+// ========== Recommendations Section ==========
+// 猜你喜欢 - InfiniteMenu 3D Globe - Full page
+.recommendations-section {
+  background: #0a0a0a;
+
+  &.recommendations-fullpage {
+    width: 100%;
+    height: 60vh;
+    min-height: 420px;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 70%);
+  }
+}
+
+// ========== Products Section ==========
+// 最新发布 - 玻璃拟态瀑布流
+.products-section {
+  padding: $spacing-16 0;
+
+  .filter-tabs {
+    .ant-radio-group {
+      .ant-radio-button-wrapper {
+        font-family: $font-body;
+        font-size: $font-size-xs;
+        letter-spacing: $letter-spacing-xs;
+        border-radius: $radius-full;
+        border: 1px solid $color-gray-200;
+        box-shadow: none;
+        padding: $spacing-1 $spacing-4;
+        background: $bg-primary;
+        color: $text-secondary;
+
+        &:hover {
+          color: $text-primary;
+        }
+
+        &::before {
+          display: none;
+        }
+      }
+
+      .ant-radio-button-wrapper-checked {
+        background: $text-primary;
+        border-color: $text-primary;
+        color: $color-white;
+        box-shadow: none;
+
+        &:hover {
+          background: $text-primary;
+          color: $color-white;
+        }
+      }
+    }
+  }
+
+  .products-waterfall {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-4;
+
+    // 玻璃拟态瀑布流卡片
+    .waterfall-card {
+      overflow: hidden;
+      cursor: pointer;
+      transition: all $transition-base;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+      }
+
+      .card-image {
+        height: 200px;
+        overflow: hidden;
+        border-radius: $radius-base $radius-base 0 0;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform $transition-slow;
+        }
+      }
+
+      &:hover .card-image img {
+        transform: scale(1.05);
+      }
+
+      .card-content {
+        padding: $spacing-4;
+
+        .card-title {
+          font-family: $font-display;
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
+          color: $text-primary;
+          letter-spacing: $letter-spacing-sm;
+          margin-bottom: $spacing-2;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+
+        .card-meta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: $spacing-3;
+
+          .card-price {
+            font-family: $font-display;
+            font-size: $font-size-lg;
+            font-weight: $font-weight-semibold;
+            color: $text-primary;
+          }
+
+          .card-location {
+            font-size: $font-size-xs;
+            color: $text-tertiary;
+            letter-spacing: $letter-spacing-xs;
+          }
+        }
+
+        .card-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .seller-info {
+            display: flex;
+            align-items: center;
+            gap: $spacing-2;
+
+            .seller-name {
+              font-size: $font-size-xs;
+              color: $text-secondary;
+              letter-spacing: $letter-spacing-xs;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .loading-more,
+  .no-more {
+    text-align: center;
+    padding: $spacing-10;
+    color: $text-tertiary;
+    font-size: $font-size-sm;
+    letter-spacing: $letter-spacing-sm;
+  }
+
+  .loading-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-2;
+  }
+}
+
+// ========== Responsive ==========
+@media (max-width: $breakpoint-lg) {
+  .hero-section {
+    min-height: 50vh;
+    padding: $spacing-16 0;
+
+    .hero-bg-parallax {
+      left: -30px;
+      right: -30px;
+      top: -15px;
+      bottom: -15px;
+    }
+
+    .hero-title {
+      font-size: $font-size-4xl;
+    }
+
+    .hero-subtitle {
+      font-size: $font-size-xl;
+    }
+  }
+
+  .products-waterfall {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .hero-section {
+    min-height: 40vh;
+    padding: $spacing-12 0;
+
+    .hero-bg-parallax {
+      left: -15px;
+      right: -15px;
+      top: -10px;
+      bottom: -10px;
+    }
+
+    .hero-title {
+      font-size: $font-size-3xl;
+      text-shadow: none;
+    }
+
+    .hero-subtitle {
+      font-size: $font-size-lg;
+      text-shadow: none;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      gap: $spacing-3;
+    }
+  }
+
+  .products-waterfall {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: $spacing-2 !important;
+  }
+}

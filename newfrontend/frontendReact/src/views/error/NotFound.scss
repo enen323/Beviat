@@ -1,0 +1,61 @@
+.not-found-page {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-black;
+  padding: $spacing-8;
+
+  .not-found-content {
+    text-align: center;
+    color: $color-white;
+
+    .not-found-code {
+      font-family: $font-display;
+      font-size: 120px;
+      font-weight: $font-weight-bold;
+      line-height: 1;
+      letter-spacing: -4px;
+      background: linear-gradient(135deg, $apple-blue-bright, $color-secondary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: $spacing-4;
+
+      @media (max-width: $breakpoint-sm - 1px) {
+        font-size: 80px;
+      }
+    }
+
+    .not-found-message {
+      font-family: $font-display;
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-semibold;
+      color: $color-white;
+      margin-bottom: $spacing-3;
+      letter-spacing: $letter-spacing-sm;
+    }
+
+    .not-found-desc {
+      font-size: $font-size-base;
+      color: $color-gray-400;
+      margin-bottom: $spacing-8;
+      letter-spacing: $letter-spacing-tight;
+    }
+
+    .back-home-btn {
+      height: $btn-height;
+      border-radius: $radius-full;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+      padding: 0 $spacing-8;
+      background: $apple-blue;
+      border-color: $apple-blue;
+
+      &:hover {
+        background: $apple-blue-bright;
+        border-color: $apple-blue-bright;
+      }
+    }
+  }
+}

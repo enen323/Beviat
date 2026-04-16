@@ -1,0 +1,108 @@
+import {
+  defineConfig,
+  presetUno,
+  presetAttributify,
+  presetIcons,
+  transformerDirectives,
+  transformerVariantGroup,
+} from 'unocss'
+
+export default defineConfig({
+  presets: [
+    presetUno(),
+    presetAttributify(),
+    presetIcons({
+      scale: 1.2,
+      warn: true,
+      extraProperties: {
+        'display': 'inline-block',
+        'vertical-align': 'middle',
+      },
+    }),
+  ],
+  transformers: [
+    transformerDirectives(),
+    transformerVariantGroup(),
+  ],
+  shortcuts: {
+    'flex-center': 'flex items-center justify-center',
+    'flex-between': 'flex items-center justify-between',
+    'flex-col-center': 'flex flex-col items-center justify-center',
+    'glass-effect': 'backdrop-blur-xl bg-white/72 saturate-180',
+    'card-base': 'bg-white rounded-xl overflow-hidden',
+    'btn-primary': 'bg-[#0071e3] text-white px-4 py-2 rounded-lg hover:bg-[#2997ff] transition-colors',
+    'btn-secondary': 'bg-gray-100 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors',
+  },
+  theme: {
+    colors: {
+      primary: {
+        DEFAULT: '#0071e3',
+        50: '#EBF5FF',
+        100: '#D6EBFF',
+        200: '#ADD6FF',
+        300: '#85C2FF',
+        400: '#5CADFF',
+        500: '#0071e3',
+        600: '#0066cc',
+        700: '#005AB3',
+        800: '#004D99',
+        900: '#004180',
+      },
+      secondary: {
+        DEFAULT: '#4ECDC4',
+        50: '#E6FAF8',
+        100: '#CCF5F1',
+        200: '#99EBE3',
+        300: '#66E0D5',
+        400: '#33D6C7',
+        500: '#4ECDC4',
+        600: '#3DBDB4',
+        700: '#2DADA4',
+        800: '#1E9D94',
+        900: '#0E8D84',
+      },
+      accent: {
+        DEFAULT: '#FFE66D',
+        50: '#FFF9E6',
+        100: '#FFF3CC',
+        200: '#FFE799',
+        300: '#FFDB66',
+        400: '#FFCF33',
+        500: '#FFE66D',
+        600: '#FFDC44',
+        700: '#FFD21B',
+        800: '#F5C400',
+        900: '#CCAA00',
+      },
+    },
+    breakpoints: {
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+    },
+  },
+  rules: [
+    ['glass', {
+      'backdrop-filter': 'blur(20px) saturate(180%)',
+      '-webkit-backdrop-filter': 'blur(20px) saturate(180%)',
+      'background-color': 'rgba(255, 255, 255, 0.72)',
+      'border-bottom': '1px solid rgba(0, 0, 0, 0.06)',
+    }],
+    ['glass-dark', {
+      'backdrop-filter': 'blur(20px) saturate(180%)',
+      '-webkit-backdrop-filter': 'blur(20px) saturate(180%)',
+      'background-color': 'rgba(0, 0, 0, 0.8)',
+      'border': '1px solid rgba(255, 255, 255, 0.1)',
+    }],
+    ['glass-card', {
+      'backdrop-filter': 'blur(16px) saturate(180%)',
+      '-webkit-backdrop-filter': 'blur(16px) saturate(180%)',
+      'background-color': 'rgba(255, 255, 255, 0.6)',
+      'border': '1px solid rgba(255, 255, 255, 0.3)',
+      'box-shadow': '0 8px 32px rgba(0, 0, 0, 0.08)',
+      'border-radius': '12px',
+    }],
+  ],
+})

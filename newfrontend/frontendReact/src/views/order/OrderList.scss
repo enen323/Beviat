@@ -1,0 +1,126 @@
+.order-list-page {
+  width: 100%;
+  min-height: calc(100vh - 200px);
+}
+
+.order-list-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 24px;
+
+  .page-title {
+    font-family: inherit;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 24px;
+    letter-spacing: -0.5px;
+  }
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-card {
+  border-radius: 12px !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .order-card-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    @media (max-width: 640px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  .order-product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+
+    .order-product-image {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .order-product-info {
+      min-width: 0;
+
+      .order-product-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #1d1d1f;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 240px;
+      }
+
+      .order-product-price {
+        font-size: 18px;
+        font-weight: 600;
+        color: #ff4d4f;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .order-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+
+    @media (max-width: 640px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .order-peer {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #86868b;
+    }
+
+    .order-location-hint {
+      font-size: 11px;
+      color: #0071e3;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .order-time {
+      font-size: 11px;
+      color: #86868b;
+    }
+  }
+}
+
+.order-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}

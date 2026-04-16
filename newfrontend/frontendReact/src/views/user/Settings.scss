@@ -1,0 +1,133 @@
+.user-settings {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: $spacing-4 $spacing-4 $spacing-8;
+
+  .settings-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    gap: $spacing-4;
+  }
+
+  .settings-back {
+    margin-bottom: $spacing-4;
+
+    .ant-btn {
+      color: $text-secondary;
+      font-size: $font-size-sm;
+
+      &:hover {
+        color: $apple-blue;
+      }
+    }
+  }
+
+  .settings-card {
+    padding: $spacing-8;
+
+    .settings-title {
+      font-family: $font-display;
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-semibold;
+      letter-spacing: $letter-spacing-sm;
+      margin-bottom: $spacing-6;
+    }
+
+    .avatar-section {
+      display: flex;
+      align-items: center;
+      gap: $spacing-4;
+      margin-bottom: $spacing-6;
+
+      .avatar-preview {
+        border: 3px solid $color-gray-200;
+      }
+
+      .ant-btn {
+        border-radius: $radius-full;
+      }
+    }
+
+    .settings-form {
+      .ant-form-item-label > label {
+        font-weight: $font-weight-medium;
+        color: $text-primary;
+      }
+
+      .ant-input,
+      .ant-input-textarea textarea,
+      .ant-select-selector {
+        border-radius: $radius-md !important;
+        border: 1px solid $color-gray-200;
+
+        &:hover,
+        &:focus {
+          border-color: $apple-blue;
+        }
+      }
+
+      .ant-input:focus,
+      .ant-input-affix-wrapper-focused {
+        border-color: $apple-blue;
+        box-shadow: 0 0 0 2px rgba($apple-blue, 0.1);
+      }
+
+      .save-btn {
+        height: $btn-height;
+        border-radius: $radius-base;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-medium;
+        background: $apple-blue;
+        border-color: $apple-blue;
+        margin-top: $spacing-4;
+
+        &:hover {
+          background: $apple-blue-bright;
+          border-color: $apple-blue-bright;
+        }
+      }
+    }
+
+    .ant-divider {
+      margin: $spacing-6 0 $spacing-4;
+
+      .ant-divider-inner-text {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $text-secondary;
+      }
+    }
+
+    .account-info {
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-3 0;
+        border-bottom: 1px solid $color-gray-100;
+
+        .info-label {
+          font-size: $font-size-sm;
+          color: $text-tertiary;
+        }
+
+        .info-value {
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
+          color: $text-primary;
+        }
+      }
+    }
+
+    .danger-zone {
+      .logout-btn {
+        height: $btn-height;
+        border-radius: $radius-base;
+        font-size: $font-size-base;
+      }
+    }
+  }
+}

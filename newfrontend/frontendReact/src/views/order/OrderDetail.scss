@@ -1,0 +1,237 @@
+.order-detail-page {
+  width: 100%;
+  min-height: calc(100vh - 200px);
+}
+
+.order-detail-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.order-detail-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 32px 24px;
+
+  .order-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1d1d1f;
+      flex: 1;
+      margin: 0;
+    }
+
+    .status-tag {
+      font-size: 13px;
+      padding: 2px 12px;
+      border-radius: 20px;
+    }
+  }
+
+  .order-steps {
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+
+  .order-product-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+
+    .product-image {
+      width: 72px;
+      height: 72px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 0;
+
+      .product-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #1d1d1f;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .product-price {
+        font-size: 18px;
+        font-weight: 600;
+        color: #ff4d4f;
+        margin-top: 4px;
+      }
+    }
+
+    .product-actions {
+      flex-shrink: 0;
+    }
+  }
+
+  .order-parties {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+
+    .party {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .party-info {
+        .party-role {
+          font-size: 11px;
+          color: #86868b;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .party-name {
+          font-size: 14px;
+          font-weight: 500;
+          color: #1d1d1f;
+        }
+
+        .party-address {
+          font-size: 11px;
+          color: #86868b;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          margin-top: 2px;
+        }
+      }
+    }
+
+    .party-divider {
+      color: #86868b;
+      font-size: 20px;
+    }
+  }
+
+  .order-receiver {
+    padding: 20px;
+    margin-bottom: 16px;
+
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1d1d1f;
+      margin: 0 0 12px 0;
+    }
+
+    .receiver-row {
+      display: flex;
+      gap: 12px;
+      padding: 6px 0;
+      font-size: 13px;
+
+      .label {
+        color: #86868b;
+        width: 60px;
+        flex-shrink: 0;
+      }
+
+      span:last-child {
+        color: #1d1d1f;
+      }
+    }
+  }
+
+  .order-map {
+    padding: 20px;
+    margin-bottom: 16px;
+
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1d1d1f;
+      margin: 0 0 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  }
+
+  .order-actions {
+    padding: 20px;
+    margin-bottom: 16px;
+
+    .action-group {
+      display: flex;
+      gap: 12px;
+
+      .ant-btn {
+        flex: 1;
+        height: 44px;
+        border-radius: 10px;
+        font-weight: 500;
+      }
+    }
+
+    .order-cancel-info,
+    .order-complete-info {
+      text-align: center;
+      padding: 16px;
+      font-size: 15px;
+      color: #86868b;
+    }
+
+    .order-complete-info {
+      color: #52c41a;
+      font-weight: 500;
+    }
+  }
+}
+
+// 发货弹窗
+.ship-modal-content {
+  .ship-hint {
+    font-size: 13px;
+    color: #86868b;
+    margin-bottom: 12px;
+  }
+
+  .selected-location {
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: #f5f5f7;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #1d1d1f;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .anticon {
+      color: #ff4d4f;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .order-parties {
+    flex-direction: column;
+
+    .party-divider {
+      transform: rotate(90deg);
+    }
+  }
+}

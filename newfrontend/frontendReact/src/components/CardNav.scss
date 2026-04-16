@@ -1,0 +1,314 @@
+// React Bits CardNav — SCSS Styles for Beviat Search Navigation
+// Animated expand/collapse with GSAP
+
+.card-nav-container {
+  display: flex;
+  width: 100%;
+  position: relative;
+}
+
+.card-nav {
+  width: 100%;
+  border-radius: $radius-md;
+  height: 36px;
+  transition: box-shadow 0.3s ease, border-radius 0.3s ease;
+
+  &.card-nav--open {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-lg;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+}
+
+// ========== Top Bar ==========
+.card-nav-top {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 $spacing-3;
+  gap: $spacing-2;
+}
+
+// ========== Hamburger Menu ==========
+.hamburger-menu {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: opacity $transition-fast;
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  .hamburger-line {
+    width: 14px;
+    height: 1.5px;
+    background: currentColor;
+    border-radius: 1px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  &.hamburger-menu--open {
+    .hamburger-line:first-child {
+      transform: translateY(2.75px) rotate(45deg);
+    }
+    .hamburger-line:last-child {
+      transform: translateY(-2.75px) rotate(-45deg);
+    }
+  }
+}
+
+// ========== Mini Search Bar (collapsed) — now with real input ==========
+.card-nav-search-mini {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: 0 $spacing-2;
+  background: $color-gray-100;
+  border: 2px solid rgba(0, 0, 0, 0.04);
+  border-radius: $radius-sm;
+  height: 30px;
+  transition: background $transition-fast, border-color $transition-fast;
+
+  &:hover {
+    background: $color-gray-200;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  &:focus-within {
+    background: $bg-primary;
+    border-color: $apple-blue;
+    box-shadow: 0 0 0 3px rgba($apple-blue, 0.12);
+  }
+
+  .search-mini-icon {
+    display: flex;
+    align-items: center;
+    color: $text-tertiary;
+    flex-shrink: 0;
+  }
+
+  .search-mini-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: $font-body;
+    font-size: $font-size-xs;
+    color: $text-primary;
+    letter-spacing: $letter-spacing-xs;
+    min-width: 0;
+
+    &::placeholder {
+      color: $text-tertiary;
+    }
+  }
+
+  .search-mini-clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: $color-gray-300;
+    color: $color-white;
+    font-size: 10px;
+    line-height: 1;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: $color-gray-400;
+    }
+  }
+}
+
+// ========== Suggestions Dropdown ==========
+.card-nav-suggestions {
+  position: absolute;
+  top: 38px;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 0 0 $radius-lg $radius-lg;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: none;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: $spacing-1 0;
+
+  .suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    padding: $spacing-2 $spacing-4;
+    cursor: pointer;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: $color-gray-100;
+    }
+
+    .suggestion-icon {
+      flex-shrink: 0;
+      color: $text-tertiary;
+    }
+
+    .suggestion-text {
+      flex: 1;
+      font-family: $font-body;
+      font-size: $font-size-xs;
+      color: $text-primary;
+      letter-spacing: $letter-spacing-xs;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .suggestion-arrow {
+      flex-shrink: 0;
+      color: $text-tertiary;
+      opacity: 0;
+      transition: opacity $transition-fast;
+    }
+
+    &:hover .suggestion-arrow {
+      opacity: 1;
+    }
+  }
+}
+
+// ========== CTA Button ==========
+.card-nav-cta-button {
+  font-family: $font-body;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  letter-spacing: $letter-spacing-xs;
+  padding: 4px 12px;
+  border: none;
+  border-radius: $radius-full;
+  cursor: pointer;
+  transition: opacity $transition-fast;
+  white-space: nowrap;
+  flex-shrink: 0;
+  height: 28px;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+// ========== Expanded Content ==========
+.card-nav-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: $spacing-2;
+  padding: 0 $spacing-3 $spacing-3;
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+
+  .card-nav--open & {
+    visibility: visible;
+    pointer-events: auto;
+    position: relative;
+  }
+}
+
+// ========== Nav Card ==========
+.nav-card {
+  border-radius: $radius-lg;
+  padding: $spacing-4;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  min-height: 120px;
+
+  .nav-card-label {
+    font-family: $font-display;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    letter-spacing: $letter-spacing-sm;
+  }
+
+  .nav-card-links {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+  }
+
+  .nav-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-1;
+    font-family: $font-body;
+    font-size: $font-size-xs;
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.85;
+    transition: opacity $transition-fast;
+
+    &:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    .nav-card-link-icon {
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// ========== Responsive ==========
+@media (max-width: $breakpoint-lg - 1px) {
+  .card-nav-content {
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-2;
+    padding: 0 $spacing-2 $spacing-2;
+  }
+
+  .nav-card {
+    min-height: 100px;
+    padding: $spacing-3;
+  }
+}
+
+@media (max-width: $breakpoint-sm - 1px) {
+  .card-nav-content {
+    grid-template-columns: 1fr;
+    gap: $spacing-2;
+    padding: 0 $spacing-2 $spacing-2;
+  }
+
+  .nav-card {
+    min-height: 80px;
+    padding: $spacing-2;
+  }
+
+  .card-nav-top {
+    padding: 0 $spacing-2;
+  }
+}

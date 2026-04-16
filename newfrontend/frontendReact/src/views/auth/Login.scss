@@ -1,0 +1,107 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $bg-secondary;
+  padding: $spacing-6;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: $spacing-10;
+  border-radius: $radius-xl;
+  background: $bg-primary;
+
+  .login-header {
+    text-align: center;
+    margin-bottom: $spacing-8;
+
+    .login-title {
+      font-family: $font-display;
+      font-size: $font-size-3xl;
+      font-weight: $font-weight-semibold;
+      line-height: $line-height-snug;
+      letter-spacing: $letter-spacing-wide;
+      color: $text-primary;
+      margin-bottom: $spacing-2;
+    }
+
+    .login-subtitle {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      letter-spacing: $letter-spacing-sm;
+    }
+  }
+
+  .login-form {
+    .ant-input-affix-wrapper {
+      border-radius: $radius-md;
+      border: 3px solid rgba(0, 0, 0, 0.04);
+      box-shadow: none;
+      padding: $input-padding-y $input-padding-x;
+
+      &:hover,
+      &.ant-input-affix-wrapper-focused {
+        border-color: rgba(0, 0, 0, 0.08);
+        box-shadow: none;
+      }
+    }
+
+    .ant-input-affix-wrapper .ant-input {
+      font-size: $input-font-size;
+    }
+
+    .login-options {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .forgot-link {
+        color: $apple-blue;
+        font-size: $font-size-sm;
+
+        &:hover {
+          color: $apple-blue-bright;
+        }
+      }
+    }
+
+    .login-btn {
+      width: 100%;
+      height: $btn-height;
+      border-radius: $radius-base;
+      font-size: $btn-font-size;
+      font-weight: $font-weight-normal;
+      background: $apple-blue;
+      border-color: $apple-blue;
+
+      &:hover {
+        background: $apple-blue-bright;
+        border-color: $apple-blue-bright;
+      }
+    }
+  }
+
+  .login-footer {
+    text-align: center;
+    margin-top: $spacing-6;
+
+    .footer-text {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+    }
+
+    .register-link {
+      color: $apple-blue;
+      font-size: $font-size-sm;
+      margin-left: $spacing-1;
+
+      &:hover {
+        color: $apple-blue-bright;
+      }
+    }
+  }
+}

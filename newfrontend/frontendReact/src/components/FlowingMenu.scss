@@ -1,0 +1,214 @@
+// React Bits FlowingMenu — SCSS Styles
+// Marquee overlay animation with hover expand effect
+
+.flowing-menu-rb {
+  display: flex;
+  gap: $spacing-2;
+  height: 260px;
+  overflow: hidden;
+  border-radius: $radius-lg;
+  background: var(--fm-bg-color, $color-gray-100);
+  padding: $spacing-2;
+
+  .fm-item {
+    flex: 1;
+    position: relative;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    cursor: pointer;
+    transition: flex 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow $transition-base;
+    min-width: 60px;
+    background: $bg-primary;
+    border: 2px solid transparent;
+
+    // Base content
+    .fm-item-base {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: $spacing-4;
+      gap: $spacing-2;
+    }
+
+    .fm-item-icon {
+      font-size: 32px;
+      transition: transform $transition-base cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: inherit;
+
+      svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    .fm-item-label {
+      font-family: $font-body;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-medium;
+      color: $text-secondary;
+      letter-spacing: $letter-spacing-xs;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity $transition-base cubic-bezier(0.22, 1, 0.36, 1),
+        transform $transition-base cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    // Marquee overlay
+    .fm-item-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: var(--marquee-bg, var(--item-color, $apple-blue));
+      pointer-events: none;
+      border-radius: $radius-lg;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .fm-marquee {
+      overflow: hidden;
+      width: 100%;
+      white-space: nowrap;
+    }
+
+    .fm-marquee-track {
+      display: flex;
+      gap: 24px;
+      will-change: transform;
+    }
+
+    .fm-marquee-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: $font-display;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-semibold;
+      color: var(--marquee-text, #fff);
+      letter-spacing: $letter-spacing-sm;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .fm-marquee-icon {
+      font-size: 1.2em;
+    }
+
+    // Active indicator
+    .fm-item-indicator {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 3px;
+      background: var(--item-color, $apple-blue);
+      border-radius: 2px;
+      z-index: 3;
+    }
+
+    // Hovered state
+    &.fm-item--hovered {
+      flex: 2.5;
+      box-shadow: $shadow-md;
+
+      .fm-item-icon {
+        transform: scale(1.2) translateY(-4px);
+      }
+
+      .fm-item-label {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+    }
+
+    // Active state
+    &.fm-item--active {
+      border: 2px solid var(--item-color, $apple-blue);
+
+      .fm-item-label {
+        opacity: 1;
+        transform: translateY(0);
+        color: var(--item-color, $apple-blue);
+        font-weight: $font-weight-semibold;
+      }
+
+      &.fm-item--hovered {
+        .fm-item-label {
+          opacity: 0;
+        }
+      }
+    }
+  }
+}
+
+// ========== Responsive ==========
+@media (max-width: $breakpoint-lg - 1px) {
+  .flowing-menu-rb {
+    height: 200px;
+    gap: $spacing-1;
+
+    .fm-item {
+      min-width: 48px;
+
+      .fm-item-icon {
+        font-size: 24px;
+
+        svg {
+          width: 24px;
+          height: 24px;
+        }
+      }
+
+      &.fm-item--hovered {
+        flex: 2;
+      }
+
+      .fm-marquee-text {
+        font-size: $font-size-lg;
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm - 1px) {
+  .flowing-menu-rb {
+    height: 160px;
+    gap: $spacing-1;
+
+    .fm-item {
+      min-width: 40px;
+
+      .fm-item-base {
+        padding: $spacing-2;
+      }
+
+      .fm-item-icon {
+        font-size: 20px;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      &.fm-item--hovered {
+        flex: 2;
+      }
+
+      .fm-marquee-text {
+        font-size: $font-size-sm;
+      }
+    }
+  }
+}

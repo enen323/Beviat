@@ -1,0 +1,192 @@
+@use '@/styles/variables.scss' as *;
+
+.chat-detail-page {
+  width: 100%;
+  height: calc(100vh - #{$nav-height});
+  display: flex;
+  flex-direction: column;
+  background: $bg-secondary;
+}
+
+.chat-detail-inner {
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-4 $spacing-6;
+  background: $bg-primary;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+  .back-link {
+    font-size: $font-size-sm;
+    color: $apple-blue;
+    cursor: pointer;
+    letter-spacing: $letter-spacing-sm;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .peer-name {
+    font-family: $font-display;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
+    letter-spacing: $letter-spacing-tight;
+  }
+
+  .header-spacer {
+    width: 48px;
+  }
+}
+
+.messages-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-4 $spacing-6;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $color-gray-300;
+    border-radius: $radius-full;
+  }
+}
+
+.message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-2;
+  margin-bottom: $spacing-4;
+
+  &.mine {
+    justify-content: flex-end;
+
+    .msg-bubble {
+      background: $apple-blue;
+      color: white;
+      border-radius: $radius-lg $radius-sm $radius-lg $radius-lg;
+    }
+  }
+
+  &.theirs {
+    justify-content: flex-start;
+
+    .msg-bubble {
+      background: $bg-primary;
+      color: $text-primary;
+      border-radius: $radius-sm $radius-lg $radius-lg $radius-lg;
+    }
+  }
+
+  .msg-avatar {
+    flex-shrink: 0;
+  }
+
+  .msg-bubble {
+    max-width: 60%;
+    padding: $spacing-3 $spacing-4;
+    font-size: $font-size-sm;
+    line-height: $line-height-normal;
+    letter-spacing: $letter-spacing-tight;
+    word-break: break-word;
+
+    .msg-image img {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: $radius-md;
+      cursor: pointer;
+    }
+
+    .msg-product {
+      display: flex;
+      gap: $spacing-2;
+      cursor: pointer;
+      padding: $spacing-2;
+      background: rgba(0, 0, 0, 0.04);
+      border-radius: $radius-md;
+
+      img {
+        width: 48px;
+        height: 48px;
+        object-fit: cover;
+        border-radius: $radius-sm;
+      }
+
+      .msg-product-info {
+        display: flex;
+        flex-direction: column;
+
+        .msg-product-title {
+          font-size: $font-size-xs;
+          color: $text-primary;
+        }
+
+        .msg-product-price {
+          font-size: $font-size-xs;
+          font-weight: $font-weight-semibold;
+          color: $apple-blue;
+        }
+      }
+    }
+  }
+}
+
+.input-bar {
+  padding: $spacing-3 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+  .input-inner {
+    padding: 0 $spacing-6;
+  }
+
+  :global(.ant-input-affix-wrapper) {
+    border-radius: $radius-full;
+    border: 3px solid rgba(0, 0, 0, 0.04);
+    box-shadow: none;
+    padding-right: 0;
+
+    &:hover,
+    &.ant-input-affix-wrapper-focused {
+      border-color: rgba(0, 0, 0, 0.08);
+      box-shadow: none;
+    }
+  }
+
+  :global(.ant-input) {
+    font-family: $font-body;
+    font-size: $font-size-sm;
+
+    &::placeholder {
+      color: $text-tertiary;
+    }
+  }
+
+  :global(.ant-input-suffix) {
+    margin-left: 0;
+  }
+
+  :global(.ant-btn-primary) {
+    background: $apple-blue;
+    border-color: $apple-blue;
+    border-radius: 0 $radius-full $radius-full 0;
+    height: 100%;
+    min-height: 36px;
+
+    &:hover {
+      background: $apple-blue-bright;
+      border-color: $apple-blue-bright;
+    }
+  }
+}

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.beviat</groupId>
+        <artifactId>beviat</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>beviat-admin</artifactId>
+    <name>beviat-admin</name>
+    <description>管理后台：数据统计、审核管理、运营配置（含启动类）</description>
+    <dependencies>
+        <dependency><groupId>com.beviat</groupId><artifactId>beviat-common</artifactId></dependency>
+        <dependency><groupId>com.beviat</groupId><artifactId>beviat-system</artifactId></dependency>
+        <dependency><groupId>com.beviat</groupId><artifactId>beviat-product</artifactId></dependency>
+        <dependency><groupId>com.beviat</groupId><artifactId>beviat-chat</artifactId></dependency>
+        <dependency><groupId>com.beviat</groupId><artifactId>beviat-auction</artifactId></dependency>
+        <dependency><groupId>com.beviat</groupId><artifactId>beviat-community</artifactId></dependency>
+        <dependency><groupId>com.beviat</groupId><artifactId>beviat-evaluation</artifactId></dependency>
+        <dependency><groupId>com.beviat</groupId><artifactId>beviat-location</artifactId></dependency>
+        <!-- MinIO/OSS -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

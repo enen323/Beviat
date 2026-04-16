@@ -1,0 +1,80 @@
+.admin-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-6 $spacing-4;
+
+  .admin-title {
+    font-family: $font-display;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-semibold;
+    letter-spacing: $letter-spacing-wide;
+    margin-bottom: $spacing-6;
+  }
+
+  .admin-tabs {
+    .ant-tabs-nav {
+      margin-bottom: $spacing-5;
+
+      &::before {
+        border-bottom: 1px solid $color-gray-200;
+      }
+
+      .ant-tabs-tab {
+        padding: $spacing-2 $spacing-4;
+        font-size: $font-size-base;
+        font-weight: $font-weight-medium;
+        color: $text-secondary;
+
+        &:hover {
+          color: $apple-blue;
+        }
+
+        &.ant-tabs-tab-active .ant-tabs-tab-btn {
+          color: $apple-blue;
+        }
+      }
+
+      .ant-tabs-ink-bar {
+        background: $apple-blue;
+      }
+    }
+  }
+
+  .admin-table-section {
+    .table-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: $spacing-4;
+
+      .ant-input-affix-wrapper {
+        border-radius: $radius-full;
+        border: 1px solid $color-gray-200;
+
+        &:hover,
+        &.ant-input-affix-wrapper-focused {
+          border-color: $apple-blue;
+        }
+      }
+    }
+
+    .ant-table {
+      border-radius: $radius-lg;
+      overflow: hidden;
+
+      .ant-table-thead > tr > th {
+        background: $color-gray-50;
+        font-weight: $font-weight-semibold;
+        font-size: $font-size-sm;
+        color: $text-secondary;
+      }
+
+      .ant-table-tbody > tr > td {
+        font-size: $font-size-sm;
+      }
+
+      .ant-table-tbody > tr:hover > td {
+        background: rgba($apple-blue, 0.03);
+      }
+    }
+  }
+}

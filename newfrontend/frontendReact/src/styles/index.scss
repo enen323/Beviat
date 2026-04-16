@@ -1,0 +1,182 @@
+@use './variables.scss' as *;
+
+// ========== Reset ==========
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: $font-body;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-normal;
+  letter-spacing: $letter-spacing-tight;
+  color: $text-primary;
+  background-color: $bg-secondary;
+}
+
+// ========== Typography ==========
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-display;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+
+h1 {
+  font-size: $font-size-6xl;
+  line-height: $line-height-tight;
+  letter-spacing: $letter-spacing-hero;
+}
+
+h2 {
+  font-size: $font-size-5xl;
+  line-height: 1.10;
+  letter-spacing: $letter-spacing-normal;
+}
+
+h3 {
+  font-size: $font-size-3xl;
+  line-height: $line-height-snug;
+  letter-spacing: $letter-spacing-wide;
+}
+
+h4 {
+  font-size: $font-size-xl;
+  line-height: $line-height-card;
+  letter-spacing: $letter-spacing-card;
+}
+
+h5 {
+  font-size: $font-size-lg;
+  line-height: $line-height-card;
+  letter-spacing: $letter-spacing-card;
+}
+
+h6 {
+  font-size: $font-size-base;
+  line-height: $line-height-normal;
+  letter-spacing: $letter-spacing-tight;
+}
+
+p {
+  margin-bottom: $spacing-4;
+  line-height: $line-height-normal;
+  letter-spacing: $letter-spacing-tight;
+}
+
+a {
+  color: $color-primary;
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $color-primary-dark;
+  }
+}
+
+// ========== Utilities ==========
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+// ========== Glassmorphism ==========
+.glass {
+  backdrop-filter: $glass-blur $glass-saturate;
+  -webkit-backdrop-filter: $glass-blur $glass-saturate;
+  background-color: $glass-bg-light;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.glass-dark {
+  backdrop-filter: $glass-blur $glass-saturate;
+  -webkit-backdrop-filter: $glass-blur $glass-saturate;
+  background-color: $glass-bg-dark;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card {
+  backdrop-filter: $glass-card-blur $glass-card-saturate;
+  -webkit-backdrop-filter: $glass-card-blur $glass-card-saturate;
+  background-color: $glass-card-bg;
+  border: $glass-card-border;
+  box-shadow: $glass-card-shadow;
+  border-radius: $radius-lg;
+}
+
+.glass-card-dark {
+  backdrop-filter: $glass-card-blur $glass-card-saturate;
+  -webkit-backdrop-filter: $glass-card-blur $glass-card-saturate;
+  background-color: $glass-card-bg-dark;
+  border: $glass-card-border-dark;
+  box-shadow: $glass-card-shadow;
+  border-radius: $radius-lg;
+}
+
+// ========== Scrollbar ==========
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $color-gray-300;
+  border-radius: $radius-full;
+
+  &:hover {
+    background: $color-gray-400;
+  }
+}
+
+// ========== Selection ==========
+::selection {
+  background-color: rgba($color-primary, 0.2);
+  color: $text-primary;
+}
+
+// ========== Focus ==========
+:focus-visible {
+  outline: 2px solid $color-primary;
+  outline-offset: 2px;
+}
+
+// ========== Section Rhythm ==========
+.section-dark {
+  background-color: $color-black;
+  color: $text-inverse;
+}
+
+.section-light {
+  background-color: $color-gray-100;
+  color: $text-primary;
+}
+
+// ========== Responsive ==========
+@media (max-width: $breakpoint-pc - 1px) {
+  body {
+    font-size: $font-size-base;
+  }
+
+  h1 { font-size: $font-size-4xl; }
+  h2 { font-size: $font-size-3xl; }
+  h3 { font-size: $font-size-2xl; }
+}
+
+@media (max-width: $breakpoint-sm - 1px) {
+  h1 { font-size: $font-size-3xl; }
+  h2 { font-size: $font-size-2xl; }
+}

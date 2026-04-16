@@ -1,0 +1,276 @@
+.user-profile {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: $spacing-8;
+
+  .profile-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+  }
+
+  // ========== Profile Header ==========
+  .profile-header {
+    overflow: hidden;
+
+    .profile-banner {
+      height: 200px;
+      background: linear-gradient(135deg, $apple-blue 0%, $color-secondary 100%);
+      border-radius: $radius-lg $radius-lg 0 0;
+
+      @media (max-width: $breakpoint-sm - 1px) {
+        height: 140px;
+      }
+    }
+
+    .profile-info {
+      display: flex;
+      align-items: flex-start;
+      gap: $spacing-5;
+      padding: 0 $spacing-6 $spacing-5;
+      margin-top: -40px;
+
+      @media (max-width: $breakpoint-sm - 1px) {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 $spacing-4 $spacing-4;
+      }
+
+      .profile-avatar-section {
+        position: relative;
+        flex-shrink: 0;
+
+        .profile-avatar {
+          border: 4px solid $color-white;
+          box-shadow: $shadow-md;
+        }
+
+        .settings-btn {
+          position: absolute;
+          bottom: 0;
+          right: -8px;
+          background: $color-white;
+          border-radius: $radius-circle;
+          box-shadow: $shadow-sm;
+          color: $text-tertiary;
+
+          &:hover {
+            color: $apple-blue;
+          }
+        }
+      }
+
+      .profile-details {
+        padding-top: $spacing-6;
+        flex: 1;
+
+        .profile-name {
+          font-family: $font-display;
+          font-size: $font-size-2xl;
+          font-weight: $font-weight-semibold;
+          letter-spacing: $letter-spacing-sm;
+          margin-bottom: $spacing-1;
+        }
+
+        .profile-bio {
+          font-size: $font-size-sm;
+          color: $text-secondary;
+          margin-bottom: $spacing-2;
+        }
+
+        .profile-meta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: $spacing-2;
+          align-items: center;
+
+          .meta-item {
+            .ant-tag {
+              border-radius: $radius-full;
+              margin: 0;
+            }
+          }
+
+          .gender {
+            font-size: $font-size-xs;
+            color: $text-tertiary;
+          }
+        }
+
+        // 个人信息标签
+        .profile-info-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: $spacing-2;
+          margin-top: $spacing-3;
+
+          .info-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: $font-size-xs;
+            color: $text-secondary;
+            background: $color-gray-100;
+            padding: 3px $spacing-2;
+            border-radius: $radius-full;
+            white-space: nowrap;
+
+            .anticon {
+              font-size: 12px;
+              color: $apple-blue;
+            }
+
+            &.credit {
+              .anticon {
+                color: $color-warning;
+              }
+
+              font-weight: $font-weight-medium;
+              color: $color-warning;
+              background: rgba($color-warning, 0.08);
+            }
+          }
+        }
+      }
+
+      .follow-btn {
+        margin-top: $spacing-8;
+        margin-left: auto;
+        height: $btn-height;
+        border-radius: $radius-full;
+        min-width: 100px;
+        font-weight: $font-weight-medium;
+
+        &.ant-btn-primary {
+          background: $apple-blue;
+          border-color: $apple-blue;
+
+          &:hover {
+            background: $apple-blue-bright;
+            border-color: $apple-blue-bright;
+          }
+        }
+      }
+    }
+  }
+
+  // ========== Folder Content Customization ==========
+  .folder-empty {
+    padding: $spacing-8 0;
+  }
+
+  // ========== Product Grid (inside folder) ==========
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: $spacing-4;
+
+    @media (max-width: $breakpoint-sm - 1px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-3;
+    }
+
+    .product-card {
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform $transition-fast, box-shadow $transition-fast;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: $shadow-md;
+      }
+
+      .product-card-image {
+        position: relative;
+        aspect-ratio: 1;
+        overflow: hidden;
+        border-radius: $radius-base $radius-base 0 0;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform $transition-slow;
+        }
+
+        .sold-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $color-white;
+          font-size: $font-size-lg;
+          font-weight: $font-weight-semibold;
+        }
+      }
+
+      &:hover .product-card-image img {
+        transform: scale(1.05);
+      }
+
+      .product-card-body {
+        padding: $spacing-3;
+
+        .product-card-title {
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
+          margin-bottom: $spacing-1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .product-card-price {
+          font-size: $font-size-base;
+          font-weight: $font-weight-bold;
+          color: $color-error;
+        }
+      }
+    }
+  }
+
+  // ========== Browse History ==========
+  .browse-history-section {
+    .browse-history-header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: $spacing-2;
+    }
+
+    .browse-card {
+      position: relative;
+
+      .browse-remove-btn {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.45);
+        color: $color-white;
+        border-radius: $radius-circle;
+        font-size: 10px;
+        opacity: 0;
+        transition: opacity $transition-fast;
+        padding: 0;
+        z-index: 2;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.7);
+        }
+      }
+
+      &:hover .browse-remove-btn {
+        opacity: 1;
+      }
+    }
+  }
+}

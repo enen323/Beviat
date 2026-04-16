@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> 
+    <title>高德高精度定位到街道</title>
+    <style>
+        #container {width: 100%; height: 500px; margin-top: 10px;} /* 给地图留顶部间距 */
+        /* 搜索输入框样式：确保显示且美观 */
+        #input {
+            width: 80%;
+            height: 36px;
+            padding: 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 新增：搜索输入框（id 必须为 input，匹配插件配置的 input: "input"） -->
+    <input id="input" type="text" placeholder="请输入地址/POI名称（如：天安门）" />
+    
+    <div id="container"></div> 
+
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode: '我的安全密钥', // 替换为自己的
+        }
+    </script>
+
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=我的key"></script>
+
+    <script type="text/javascript">
+        window.onload = function() {
+            var map = new AMap.Map('container', {
+                zoom: 18,
+                resizeEnable: true
+            });
+
+            AMap.plugin('AMap.Geolocation', function() {
+                var geolocation = new AMap.Geolocation({
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    zoomToAccuracy: true,
+                    buttonPosition: 'RB',
+                    buttonOffset: new AMap.Pixel(10, 20)
+                });
+
+                map.addControl(geolocation);
+                geolocation.getCurrentPosition();
+
+                AMap.event.addListener(geolocation, 'complete', function(data) {
+                    console.log('✅ 高精度定位结果：', data);
+                    alert(
+                        '定位成功！\n' +
+                        '详细地址：' + data.formattedAddress + '\n' +
+                        '街道：' + data.addressComponent.street + '\n' +
+                        '经纬度：' + data.position.lng + ',' + data.position.lat
+                    );
+                    map.setCenter(data.position);
+                    map.setZoom(18);
+                });
+
+                AMap.event.addListener(geolocation, 'error', function(err) {
+                    console.error('❌ 定位失败：', err);
+                    alert('定位失败！原因：' + err.info + '\n请按F12查看控制台详情');
+                });
+            });
+
+            // 搜索插件逻辑（调整：确保map已初始化，且输入框存在）
+            AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function () {
+                var autoOptions = {
+                    city: "北京", // 可改为 "全国" 或目标城市
+                    input: "input" // 绑定id为input的输入框（现在页面已存在）
+                };
+                var autocomplete = new AMap.Autocomplete(autoOptions);
+
+                var placeSearch = new AMap.PlaceSearch({
+                    city: '北京',
+                    map: map,
+                    panel: false // 如需搜索结果面板，可新增div并指定panel: "panel-id"
+                });
+
+                // 选中联想结果时，在地图上定位该地点
+                AMap.event.addListener(autocomplete, 'select', function (e) {
+                    placeSearch.search(e.poi.name, function (status, result) {
+                        if (status === 'complete' && result.info === 'OK') {
+                            // 定位到搜索结果的第一个地点
+                            if (result.poiList && result.poiList.pois.length > 0) {
+                                var poi = result.poiList.pois[0];
+                                map.setCenter(poi.location);
+                                map.setZoom(18);
+                            }
+                        }
+                    });
+                });
+            });
+        }
+    </script>
+</body>
+</html>

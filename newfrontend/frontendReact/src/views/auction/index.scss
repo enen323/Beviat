@@ -1,0 +1,163 @@
+.auction-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-6 $spacing-4;
+
+  .auction-header {
+    margin-bottom: $spacing-6;
+
+    .auction-title {
+      font-family: $font-display;
+      font-size: $font-size-3xl;
+      font-weight: $font-weight-semibold;
+      letter-spacing: $letter-spacing-wide;
+      margin-bottom: $spacing-4;
+    }
+
+    .auction-tabs {
+      display: flex;
+      gap: $spacing-2;
+      background: $color-gray-100;
+      border-radius: $radius-full;
+      padding: $spacing-1;
+      width: fit-content;
+
+      .auction-tab {
+        padding: $spacing-2 $spacing-5;
+        border: none;
+        border-radius: $radius-full;
+        background: transparent;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $text-secondary;
+        cursor: pointer;
+        transition: all $transition-fast;
+        font-family: $font-body;
+
+        &:hover {
+          color: $text-primary;
+        }
+
+        &.active {
+          background: $color-white;
+          color: $apple-blue;
+          box-shadow: $shadow-sm;
+        }
+      }
+    }
+  }
+
+  .auction-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: $spacing-5;
+
+    .auction-card {
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform $transition-base, box-shadow $transition-base;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: $shadow-lg;
+      }
+
+      .auction-card-image {
+        position: relative;
+        aspect-ratio: 4/3;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform $transition-slow;
+        }
+
+        &:hover img {
+          transform: scale(1.05);
+        }
+
+        .auction-status-tag {
+          position: absolute;
+          top: $spacing-2;
+          left: $spacing-2;
+          margin: 0;
+        }
+      }
+
+      .auction-card-body {
+        padding: $spacing-4;
+
+        .auction-card-title {
+          font-size: $font-size-base;
+          font-weight: $font-weight-semibold;
+          color: $text-primary;
+          margin-bottom: $spacing-2;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .auction-card-price {
+          display: flex;
+          align-items: baseline;
+          gap: $spacing-2;
+          margin-bottom: $spacing-2;
+
+          .current-price {
+            font-size: $font-size-xl;
+            font-weight: $font-weight-bold;
+            color: $color-error;
+          }
+
+          .start-price {
+            font-size: $font-size-xs;
+            color: $text-tertiary;
+          }
+        }
+
+        .auction-card-meta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: $font-size-xs;
+          color: $text-tertiary;
+
+          .bid-count {
+            display: flex;
+            align-items: center;
+            gap: $spacing-1;
+          }
+
+          .end-time {
+            display: flex;
+            align-items: center;
+            gap: $spacing-1;
+            color: $color-warning;
+          }
+        }
+      }
+    }
+  }
+
+  .auction-load-more {
+    margin-top: $spacing-8;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+
+    .ant-btn {
+      height: $btn-height;
+      border-radius: $radius-full;
+      font-size: $font-size-base;
+      color: $apple-blue;
+      border-color: $apple-blue;
+
+      &:hover {
+        color: $apple-blue-bright;
+        border-color: $apple-blue-bright;
+      }
+    }
+  }
+}

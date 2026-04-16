@@ -1,0 +1,152 @@
+.publish-page {
+  width: 100%;
+  min-height: calc(100vh - #{$nav-height});
+  background: $bg-secondary;
+  padding: $spacing-8 $spacing-6;
+}
+
+.publish-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.publish-header {
+  margin-bottom: $spacing-10;
+
+  .publish-title {
+    font-family: $font-display;
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-semibold;
+    letter-spacing: $letter-spacing-wide;
+    color: $text-primary;
+    margin-bottom: $spacing-2;
+  }
+
+  .publish-subtitle {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    letter-spacing: $letter-spacing-sm;
+  }
+}
+
+.publish-form {
+  .form-section {
+    background: $bg-primary;
+    border-radius: $radius-xl;
+    padding: $spacing-8;
+    margin-bottom: $spacing-6;
+
+    .section-label {
+      font-family: $font-display;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      letter-spacing: $letter-spacing-tight;
+      color: $text-primary;
+      margin-bottom: $spacing-6;
+    }
+  }
+
+  :global(.ant-input),
+  :global(.ant-input-affix-wrapper),
+  :global(.ant-input-textarea textarea),
+  :global(.ant-select-selector),
+  :global(.ant-input-number) {
+    border-radius: $radius-md;
+    border: 3px solid rgba(0, 0, 0, 0.04);
+    box-shadow: none;
+
+    &:hover,
+    &:focus,
+    &.ant-input-affix-wrapper-focused,
+    &.ant-select-focused .ant-select-selector {
+      border-color: rgba(0, 0, 0, 0.08);
+      box-shadow: none;
+    }
+  }
+
+  :global(.ant-radio-button-wrapper) {
+    border-radius: $radius-full;
+    border: 1px solid $color-gray-200;
+    box-shadow: none;
+    background: $bg-primary;
+    color: $text-secondary;
+    font-size: $font-size-xs;
+    letter-spacing: $letter-spacing-xs;
+
+    &:hover {
+      color: $text-primary;
+    }
+
+    // First and last radio button in group - round
+    &:first-child {
+      border-radius: $radius-full 0 0 $radius-full;
+    }
+
+    &:last-child {
+      border-radius: 0 $radius-full $radius-full 0;
+    }
+  }
+
+  :global(.ant-radio-button-wrapper-checked) {
+    background: $text-primary;
+    border-color: $text-primary;
+    color: $color-white;
+    box-shadow: none;
+
+    &:hover {
+      background: $text-primary;
+      border-color: $text-primary;
+      color: $color-white;
+    }
+  }
+
+  .price-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-4;
+  }
+
+  :global(.ant-upload.ant-upload-select-picture-card) {
+    border-radius: $radius-lg;
+    border: 2px dashed $color-gray-200;
+    background: $bg-secondary;
+    width: 120px;
+    height: 120px;
+
+    &:hover {
+      border-color: $apple-blue;
+    }
+  }
+
+  :global(.ant-upload-list-picture-card .ant-upload-list-item) {
+    border-radius: $radius-lg;
+    width: 120px;
+    height: 120px;
+  }
+
+  .upload-tip {
+    font-size: $font-size-xs;
+    color: $text-tertiary;
+    letter-spacing: $letter-spacing-xs;
+    margin-top: $spacing-2;
+  }
+
+  .submit-actions {
+    display: flex;
+    gap: $spacing-4;
+    width: 100%;
+    justify-content: flex-end;
+
+    :global(.ant-btn-primary) {
+      background: $apple-blue;
+      border-color: $apple-blue;
+      border-radius: $radius-base;
+      min-width: 120px;
+
+      &:hover {
+        background: $apple-blue-bright;
+        border-color: $apple-blue-bright;
+      }
+    }
+  }
+}

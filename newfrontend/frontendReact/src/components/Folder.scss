@@ -1,0 +1,356 @@
+// ========== React Bits Inspired Folder Component ==========
+// 3D folder visual with expand/collapse content panel
+
+.folder-container {
+  margin-top: $spacing-5;
+
+  // ========== Folder Grid ==========
+  .folder-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-6;
+    padding: $spacing-6 $spacing-4;
+
+    @media (max-width: $breakpoint-sm - 1px) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: $spacing-4;
+      padding: $spacing-4 $spacing-2;
+    }
+  }
+
+  // ========== Folder Wrapper ==========
+  .folder-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-3;
+    transition: transform $transition-base;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+
+    &.active {
+      transform: translateY(-2px);
+
+      .folder-label-section {
+        .folder-name {
+          color: var(--folder-active-color, $apple-blue);
+          font-weight: $font-weight-semibold;
+        }
+      }
+    }
+  }
+
+  // ========== 3D Folder Visual (React Bits Style) ==========
+  .rb-folder {
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+    transform-style: preserve-3d;
+
+    &:hover {
+      .rb-paper {
+        transform: translate(-50%, 0%);
+      }
+
+      .rb-folder__front {
+        transform: skew(15deg) scaleY(0.6);
+      }
+
+      .rb-folder__front.right {
+        transform: skew(-15deg) scaleY(0.6);
+      }
+    }
+
+    &.open {
+      transform: translateY(-8px);
+
+      .rb-paper:nth-child(1) {
+        transform: translate(-120%, -70%) rotateZ(-15deg);
+        animation: paperFloat1 0.4s ease-out;
+
+        &:hover {
+          transform: translate(-120%, -70%) rotateZ(-15deg) scale(1.1);
+        }
+      }
+
+      .rb-paper:nth-child(2) {
+        transform: translate(10%, -70%) rotateZ(15deg);
+        height: 80%;
+        animation: paperFloat2 0.4s ease-out 0.05s both;
+
+        &:hover {
+          transform: translate(10%, -70%) rotateZ(15deg) scale(1.1);
+        }
+      }
+
+      .rb-paper:nth-child(3) {
+        transform: translate(-50%, -100%) rotateZ(5deg);
+        height: 80%;
+        animation: paperFloat3 0.4s ease-out 0.1s both;
+
+        &:hover {
+          transform: translate(-50%, -100%) rotateZ(5deg) scale(1.1);
+        }
+      }
+
+      .rb-folder__front {
+        transform: skew(15deg) scaleY(0.6);
+      }
+
+      .rb-folder__front.right {
+        transform: skew(-15deg) scaleY(0.6);
+      }
+    }
+  }
+
+  .rb-folder__back {
+    position: relative;
+    width: 100px;
+    height: 80px;
+    background: var(--folder-back-color);
+    border-radius: 0 10px 10px 10px;
+    box-shadow: $shadow-md;
+
+    &::after {
+      position: absolute;
+      z-index: 0;
+      bottom: 98%;
+      left: 0;
+      content: '';
+      width: 30px;
+      height: 10px;
+      background: var(--folder-back-color);
+      border-radius: 5px 5px 0 0;
+    }
+
+    @media (max-width: $breakpoint-sm - 1px) {
+      width: 80px;
+      height: 64px;
+
+      &::after {
+        width: 24px;
+        height: 8px;
+      }
+    }
+  }
+
+  .rb-paper {
+    position: absolute;
+    z-index: 2;
+    bottom: 10%;
+    left: 50%;
+    transform: translate(-50%, 10%);
+    width: 70%;
+    height: 80%;
+    background: var(--paper-1);
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    &:nth-child(2) {
+      background: var(--paper-2);
+      width: 80%;
+      height: 70%;
+    }
+
+    &:nth-child(3) {
+      background: var(--paper-3);
+      width: 90%;
+      height: 60%;
+    }
+  }
+
+  .rb-paper-content {
+    font-size: 8px;
+    color: $text-tertiary;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90%;
+    opacity: 0.6;
+
+    @media (max-width: $breakpoint-sm - 1px) {
+      font-size: 7px;
+    }
+  }
+
+  .rb-folder__front {
+    position: absolute;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    background: var(--folder-color);
+    border-radius: 5px 10px 10px 10px;
+    transform-origin: bottom;
+    transition: all 0.3s ease-in-out;
+
+    &.right {
+      background: var(--folder-back-color);
+      opacity: 0.5;
+    }
+  }
+
+  // ========== Folder Label Section ==========
+  .folder-label-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-1;
+    cursor: pointer;
+    user-select: none;
+
+    .folder-icon-badge {
+      font-size: 18px;
+      transition: transform $transition-base;
+
+      @media (max-width: $breakpoint-sm - 1px) {
+        font-size: 16px;
+      }
+    }
+
+    .folder-name {
+      font-family: $font-body;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      color: $text-primary;
+      letter-spacing: $letter-spacing-xs;
+      transition: color $transition-base, font-weight $transition-base;
+      text-align: center;
+
+      @media (max-width: $breakpoint-sm - 1px) {
+        font-size: $font-size-xs;
+      }
+    }
+
+    .folder-count-badge {
+      font-family: $font-display;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-semibold;
+      color: $text-tertiary;
+      background: $color-gray-100;
+      padding: 1px $spacing-2;
+      border-radius: $radius-full;
+      min-width: 24px;
+      text-align: center;
+    }
+  }
+
+  // ========== Content Panel (Expanded) ==========
+  .folder-content-panel {
+    margin-top: $spacing-4;
+    background: $bg-primary;
+    border: 1px solid $color-gray-200;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-md;
+    overflow: hidden;
+    animation: slideDown 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+
+    .folder-content-header {
+      display: flex;
+      align-items: center;
+      gap: $spacing-3;
+      padding: $spacing-4 $spacing-5;
+      border-bottom: 1px solid $color-gray-100;
+      background: $color-gray-50;
+
+      .content-icon {
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+      }
+
+      .content-title {
+        font-family: $font-display;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+        flex: 1;
+        margin: 0;
+      }
+
+      .content-count {
+        font-size: $font-size-sm;
+        color: $text-tertiary;
+      }
+
+      .content-close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: $radius-full;
+        border: none;
+        background: transparent;
+        color: $text-tertiary;
+        cursor: pointer;
+        transition: all $transition-fast;
+
+        &:hover {
+          background: $color-gray-200;
+          color: $text-primary;
+        }
+      }
+    }
+
+    .folder-content-body {
+      padding: $spacing-5;
+
+      @media (max-width: $breakpoint-sm - 1px) {
+        padding: $spacing-4;
+      }
+    }
+  }
+
+  // ========== Empty State ==========
+  .folder-empty {
+    padding: $spacing-8 0;
+  }
+}
+
+// ========== Animations ==========
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 2000px;
+  }
+}
+
+@keyframes paperFloat1 {
+  from {
+    transform: translate(-50%, 10%);
+  }
+  to {
+    transform: translate(-120%, -70%) rotateZ(-15deg);
+  }
+}
+
+@keyframes paperFloat2 {
+  from {
+    transform: translate(-50%, 10%);
+  }
+  to {
+    transform: translate(10%, -70%) rotateZ(15deg);
+  }
+}
+
+@keyframes paperFloat3 {
+  from {
+    transform: translate(-50%, 10%);
+  }
+  to {
+    transform: translate(-50%, -100%) rotateZ(5deg);
+  }
+}
