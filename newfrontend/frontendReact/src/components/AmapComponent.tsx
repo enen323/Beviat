@@ -4,8 +4,8 @@ import { EnvironmentOutlined, SearchOutlined } from '@ant-design/icons'
 import './AmapComponent.scss'
 
 // 高德地图配置 - 需要在index.html中引入JS API或动态加载
-const AMAP_KEY = 'c15f4ca8e7853f7e078510f26b4cb699'  // 替换为实际key
-const AMAP_SECURITY_CODE = 'be2414d33349f8e4ad550991006a7b9e' // 替换为实际安全密钥
+const AMAP_KEY = '我的KEY'  // 替换为实际key
+const AMAP_SECURITY_CODE = '我的安全密钥' // 替换为实际安全密钥
 
 interface AmapComponentProps {
   /** 地图容器高度 */
