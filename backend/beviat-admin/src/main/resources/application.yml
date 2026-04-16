@@ -8,9 +8,9 @@ spring:
     name: beviat
 
   datasource:
-    urlurl: jdbc: mysql: / / localhost: 3306 / beviat ? useUnicode = true& characterEncoding = utf8& useSSL = false& serverTimezone =亚洲/ Shanghai& allowPublicKeyRetrieval = true& rewriteBatchedStatements = true: jdbc:mysql://localhost:3306/beviat?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    url: jdbc:mysql://localhost:3306/beviat?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
     username: root
-    password:root
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 20
