@@ -133,9 +133,22 @@ export interface LoginResult {
 
 export interface RegisterResult {}
 
+export interface ForgotPasswordParams {
+  username: string
+  phone: string
+  verifyCode: string
+}
+
+export interface ResetPasswordParams {
+  resetToken: string
+  newPassword: string
+}
+
 export const userApi = {
   login: (data: LoginParams) => post<LoginResult>('/auth/login', data),
   register: (data: RegisterParams) => post<RegisterResult>('/auth/register', data),
+  forgotPassword: (data: ForgotPasswordParams) => post<string>('/auth/forgot-password', data),
+  resetPassword: (data: ResetPasswordParams) => post<void>('/auth/reset-password', data),
   getProfile: () => get<User>('/auth/me'),
   refreshToken: (refreshToken: string) => post<LoginResult>('/auth/refresh', null, { params: { refreshToken } }),
   logout: () => post('/auth/logout'),
@@ -227,7 +240,11 @@ export const auctionApi = {
     get<PageResponse<Auction>>('/auctions', { params }),
   detail: (id: number) => get<Auction>(`/auctions/${id}`),
   getBids: (auctionId: number) => get<Bid[]>(`/auctions/${auctionId}/bids`),
-  placeBid: (auctionId: number, amount: number) => post<Bid>(`/auctions/${auctionId}/bids`, { amount }),
+  placeBid: (auctionId: number, amount: number) => post<Bid>(`/auctions/${auctionId}/bids`, null, { params: { amount } }),
+  create: (params: { productId: number; startingPrice: number; priceIncrement?: number; endTime: string; reservePrice?: number }) =>
+    post<Auction>('/auctions', null, { params }),
+  getMyAuctions: (params?: { status?: string; page?: number; size?: number }) =>
+    get<PageResponse<Auction>>('/auctions/my', { params }),
 }
 
 export interface Post {

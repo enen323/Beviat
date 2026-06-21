@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Tag, Spin, Empty } from 'antd'
-import { ClockCircleOutlined, FireOutlined } from '@ant-design/icons'
+import { ClockCircleOutlined, FireOutlined, PlusOutlined } from '@ant-design/icons'
 import { auctionApi } from '@/api'
 import type { Auction } from '@/api'
 import './index.scss'
@@ -36,8 +36,8 @@ const AuctionList: React.FC = () => {
   const fetchAuctions = async (pageNum: number, status: string, append = false) => {
     setLoading(true)
     try {
-      const params: { status?: string; page: number; size: number } = { page: pageNum, size: 12 }
-      if (status !== 'all') params.status = status
+      const params: { status?: number; page: number; size: number } = { page: pageNum, size: 12 }
+      if (status === 'ongoing') params.status = 0
       const res = await auctionApi.list(params)
       const list = res.records || []
       setAuctions(append ? (prev) => [...prev, ...list] : list)
@@ -82,7 +82,13 @@ const AuctionList: React.FC = () => {
     <div className="auction-page">
       <div className="auction-header">
         <h1 className="auction-title">拍卖中心</h1>
-        <div className="auction-tabs">
+        <div className="auction-header-actions">
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('/auction/create')}>
+            发起拍卖
+          </Button>
+        </div>
+      </div>
+      <div className="auction-tabs">
           {statusTabs.map((tab) => (
             <button
               key={tab.key}
@@ -93,7 +99,6 @@ const AuctionList: React.FC = () => {
             </button>
           ))}
         </div>
-      </div>
 
       <Spin spinning={loading && auctions.length === 0}>
         {auctions.length === 0 && !loading ? (

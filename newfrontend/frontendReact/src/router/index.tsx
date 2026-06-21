@@ -15,6 +15,7 @@ const ResponsiveLayout = React.lazy(() => import('@/layouts/ResponsiveLayout'))
 const Home = React.lazy(() => import('@/views/home/index'))
 const Login = React.lazy(() => import('@/views/auth/Login'))
 const Register = React.lazy(() => import('@/views/auth/Register'))
+const ForgotPassword = React.lazy(() => import('@/views/auth/ForgotPassword'))
 const ProductDetail = React.lazy(() => import('@/views/product/Detail'))
 const PublishProduct = React.lazy(() => import('@/views/product/Publish'))
 const ChatList = React.lazy(() => import('@/views/chat/index'))
@@ -24,6 +25,7 @@ const AuctionDetail = React.lazy(() => import('@/views/auction/Detail'))
 const CommunityList = React.lazy(() => import('@/views/community/index'))
 const CommunityDetail = React.lazy(() => import('@/views/community/Detail'))
 const CreatePost = React.lazy(() => import('@/views/community/Create'))
+const AuctionCreate = React.lazy(() => import('@/views/auction/Create'))
 const OrderList = React.lazy(() => import('@/views/order/OrderList'))
 const OrderDetail = React.lazy(() => import('@/views/order/OrderDetail'))
 const UserProfile = React.lazy(() => import('@/views/user/Profile'))
@@ -46,6 +48,11 @@ export const router = createBrowserRouter([
     path: '/auth/register',
     element: <ResponsiveLayout>{LazyLoad(Register)}</ResponsiveLayout>,
     handle: { title: '注册 - Beviat' },
+  },
+  {
+    path: '/auth/forgot',
+    element: <ResponsiveLayout>{LazyLoad(ForgotPassword)}</ResponsiveLayout>,
+    handle: { title: '忘记密码 - Beviat' },
   },
   {
     path: '/product/:id',
@@ -71,6 +78,11 @@ export const router = createBrowserRouter([
     path: '/auction',
     element: <ResponsiveLayout>{LazyLoad(AuctionList)}</ResponsiveLayout>,
     handle: { title: '拍卖 - Beviat' },
+  },
+  {
+    path: '/auction/create',
+    element: <ResponsiveLayout>{LazyLoad(AuctionCreate)}</ResponsiveLayout>,
+    handle: { title: '发起拍卖 - Beviat' },
   },
   {
     path: '/auction/:id',

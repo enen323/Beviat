@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Avatar, Badge, Button, Dropdown } from 'antd'
 import {
@@ -12,6 +12,7 @@ import {
   ShoppingCartOutlined,
 } from '@ant-design/icons'
 import { useUserStore } from '@/stores/user'
+import { useChatStore } from '@/stores/chat'
 import CardNav from '@/components/CardNav'
 import './PCLayout.scss'
 
@@ -64,8 +65,8 @@ const PCLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const { userInfo, isLoggedIn, logout } = useUserStore()
-  const [unreadCount] = useState(0)
-  const [notificationCount] = useState(0)
+  const unreadCount = useChatStore((s) => s.unreadCount)
+  const notificationCount = 0
 
   const handleSearch = useCallback(
     (keyword: string) => {

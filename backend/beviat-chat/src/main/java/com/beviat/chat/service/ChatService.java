@@ -3,6 +3,7 @@ package com.beviat.chat.service;
 import com.beviat.chat.dto.ChatMessageDTO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.beviat.chat.vo.ChatMessageVO;
+import com.beviat.chat.vo.ConversationVO;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface ChatService {
     Page<ChatMessageVO> getMessages(Long userId1, Long userId2, int page, int size);
 
     /** 获取当前用户的聊天列表（最近会话列表） */
-    List<Object> getChatList(Long currentUserId);
+    List<ConversationVO> getChatList(Long currentUserId);
 
     /** 标记与某用户的消息为已读 */
     int markAsRead(Long currentUserId, Long senderId);

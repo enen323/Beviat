@@ -9,6 +9,7 @@ import {
   EnvironmentOutlined,
   EyeOutlined,
   MessageOutlined,
+  ClockCircleOutlined,
   SafetyCertificateOutlined,
   ExclamationCircleOutlined,
   DollarOutlined,
@@ -19,7 +20,6 @@ import {
 import { productApi, orderApi, chatApi, type Product } from '@/api'
 import { useUserStore } from '@/stores/user'
 import { useDevice } from '@/hooks/useDevice'
-import AmapComponent from '@/components/AmapComponent'
 import './Detail.scss'
 
 // 声明全局AMap类型
@@ -234,7 +234,7 @@ export default function ProductDetail() {
         type: 'text',
         productId: product.id,
       })
-      navigate('/chat')
+      navigate('/chat/' + product.sellerId)
     } catch {
       message.error('发送消息失败')
     }
@@ -509,6 +509,15 @@ export default function ProductDetail() {
                   onClick={() => navigate('/chat')}
                 >
                   查看消息
+                </Button>
+              )}
+              {isOwner && product.status === 'available' && (
+                <Button
+                  className="action-btn action-auction"
+                  icon={<ClockCircleOutlined />}
+                  onClick={() => navigate(`/auction/create?productId=${product.id}`)}
+                >
+                  发起拍卖
                 </Button>
               )}
             </div>

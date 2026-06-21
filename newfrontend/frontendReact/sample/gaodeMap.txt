@@ -3,24 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> 
-    <title>高德高精度定位到街道</title>
+    <title>高德高精度定位+骑行路线规划</title>
     <style>
-        #container {width: 100%; height: 500px; margin-top: 10px;} /* 给地图留顶部间距 */
-        /* 搜索输入框样式：确保显示且美观 */
-        #input {
-            width: 80%;
-            height: 36px;
-            padding: 0 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
+        #container {width: 100%; height: 500px; margin-top: 10px;}
+        #input {width: 80%; height: 36px; padding: 0 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;}
+        /* 新增：路线规划按钮样式 */
+        #routeBtn {height: 36px; padding: 0 15px; margin-left: 10px; background: #009688; color: white; border: none; border-radius: 4px; cursor: pointer;}
     </style>
 </head>
 <body>
-    <!-- 新增：搜索输入框（id 必须为 input，匹配插件配置的 input: "input"） -->
-    <input id="input" type="text" placeholder="请输入地址/POI名称（如：天安门）" />
-    
+    <input id="input" type="text" placeholder="请输入骑行终点（如：天安门）" />
+    <button id="routeBtn">规划骑行路线</button>
     <div id="container"></div> 
 
     <script type="text/javascript">
@@ -28,15 +21,24 @@
             securityJsCode: '我的安全密钥', // 替换为自己的
         }
     </script>
-
     <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=我的key"></script>
 
     <script type="text/javascript">
         window.onload = function() {
+            // 1. 初始化地图
             var map = new AMap.Map('container', {
                 zoom: 18,
                 resizeEnable: true
             });
+
+            // 2. 高精度定位（保留原有逻辑）
+            var marker = new AMap.Marker({
+                position: new AMap.LngLat(116.39, 39.9),
+                offset: new AMap.Pixel(-10, -10),
+                icon: '//vdata.amap.com/icons/b18/1/2.png',
+                title: '北京'
+            });
+            map.add(marker);
 
             AMap.plugin('AMap.Geolocation', function() {
                 var geolocation = new AMap.Geolocation({
@@ -46,7 +48,6 @@
                     buttonPosition: 'RB',
                     buttonOffset: new AMap.Pixel(10, 20)
                 });
-
                 map.addControl(geolocation);
                 geolocation.getCurrentPosition();
 
@@ -68,33 +69,83 @@
                 });
             });
 
-            // 搜索插件逻辑（调整：确保map已初始化，且输入框存在）
-            AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function () {
+            // 3. 搜索插件 + 骑行路线规划
+            AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Riding'], function () {
+                // 3.1 初始化搜索插件
                 var autoOptions = {
-                    city: "北京", // 可改为 "全国" 或目标城市
-                    input: "input" // 绑定id为input的输入框（现在页面已存在）
+                    city: "北京",
+                    input: "input"
                 };
                 var autocomplete = new AMap.Autocomplete(autoOptions);
-
                 var placeSearch = new AMap.PlaceSearch({
                     city: '北京',
                     map: map,
-                    panel: false // 如需搜索结果面板，可新增div并指定panel: "panel-id"
+                    panel: false
                 });
 
-                // 选中联想结果时，在地图上定位该地点
+                // 3.2 初始化骑行插件（全局可访问）
+                var riding = new AMap.Riding({
+                    policy: AMap.RidingPolicy.LEAST_TIME,
+                    map: map // 绑定地图，用于渲染路线
+                });
+
+                // 3.3 存储定位的起点（默认值，定位后更新）
+                var startLngLat = [116.379028, 39.865042]; // 初始起点
+                // 监听定位成功事件，更新起点为当前定位
+                AMap.event.addListener(AMap.Geolocation, 'complete', function(data) {
+                    startLngLat = [data.position.lng, data.position.lat];
+                });
+
+                // 3.4 搜索联想选中后，规划骑行路线
                 AMap.event.addListener(autocomplete, 'select', function (e) {
                     placeSearch.search(e.poi.name, function (status, result) {
-                        if (status === 'complete' && result.info === 'OK') {
-                            // 定位到搜索结果的第一个地点
-                            if (result.poiList && result.poiList.pois.length > 0) {
-                                var poi = result.poiList.pois[0];
-                                map.setCenter(poi.location);
-                                map.setZoom(18);
-                            }
+                        if (status === 'complete' && result.info === 'OK' && result.poiList.pois.length > 0) {
+                            var endLngLat = [
+                                result.poiList.pois[0].location.lng,
+                                result.poiList.pois[0].location.lat
+                            ];
+                            // 执行骑行路线规划
+                            planRidingRoute(startLngLat, endLngLat);
                         }
                     });
                 });
+
+                // 3.5 点击按钮手动触发路线规划
+                document.getElementById('routeBtn').addEventListener('click', function() {
+                    var inputVal = document.getElementById('input').value;
+                    if (!inputVal) {
+                        alert('请输入骑行终点！');
+                        return;
+                    }
+                    placeSearch.search(inputVal, function (status, result) {
+                        if (status === 'complete' && result.info === 'OK' && result.poiList.pois.length > 0) {
+                            var endLngLat = [
+                                result.poiList.pois[0].location.lng,
+                                result.poiList.pois[0].location.lat
+                            ];
+                            planRidingRoute(startLngLat, endLngLat);
+                        }
+                    });
+                });
+
+                // 3.6 骑行路线规划核心方法
+                function planRidingRoute(start, end) {
+                    // 清除之前的路线
+                    riding.clear();
+                    // 搜索骑行路线
+                    riding.search(start, end, function (status, result) {
+                        if (status === 'complete' && result.info === 'OK') {
+                            console.log('✅ 骑行路线规划成功：', result);
+                            // 路线会自动渲染到map上（因绑定了map: map）
+                            // 定位到路线起点
+                            map.setCenter(start);
+                            map.setZoom(15);
+                        } else {
+                            console.error('❌ 骑行路线规划失败：', result);
+                            alert('路线规划失败！原因：' + result.info);
+                        }
+                    });
+                }
             });
         }
     </script>

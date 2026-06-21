@@ -75,12 +75,12 @@ interface MenuItemProps {
 
 function MenuItem({
   item,
-  idx,
+  idx: _idx,
   speed,
   isActive,
   marqueeBgColor,
   marqueeTextColor,
-  borderColor,
+  borderColor: _borderColor,
   onSelect,
 }: MenuItemProps) {
   const itemRef = useRef<HTMLDivElement>(null)

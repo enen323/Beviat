@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Tabs, Card, Tag, Avatar, Empty, Spin, Button, message } from 'antd'
-import { ShoppingOutlined, ShopOutlined, EnvironmentOutlined, CarOutlined, CheckCircleOutlined } from '@ant-design/icons'
+import { Tabs, Card, Tag, Avatar, Empty, Spin, message } from 'antd'
+import { ShoppingOutlined, ShopOutlined, EnvironmentOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { orderApi, type Order } from '@/api'
 import { useUserStore } from '@/stores/user'
@@ -18,7 +18,7 @@ const statusConfig: Record<number, { text: string; color: string }> = {
 
 export default function OrderList() {
   const navigate = useNavigate()
-  const { isLoggedIn, userId } = useUserStore()
+  const { isLoggedIn } = useUserStore()
   const [activeTab, setActiveTab] = useState('buy')
   const [buyOrders, setBuyOrders] = useState<Order[]>([])
   const [sellOrders, setSellOrders] = useState<Order[]>([])
@@ -77,7 +77,7 @@ export default function OrderList() {
             </div>
             {order.status === 3 && (order.buyerLatitude || order.sellerLatitude) && (
               <div className="order-location-hint">
-                <EnvironmentOutlined /> 可查看双方位置
+                <EnvironmentOutlined /> 可查看位置与路线
               </div>
             )}
             <div className="order-time">{order.createdAt?.replace('T', ' ').slice(0, 16)}</div>

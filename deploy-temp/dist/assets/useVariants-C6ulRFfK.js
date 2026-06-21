@@ -1,0 +1,1 @@
+import{F as e,P as t,Ut as n,zt as r}from"./jsx-runtime-Dn0i4tYK.js";import{v as i}from"./tooltip-B1U4rk7S.js";var a=n(r()),o=(n,r,o)=>{let{variant:s,[n]:c}=a.useContext(t),l=a.useContext(i),u=c?.variant,d;d=r===void 0?o===!1?`borderless`:l??u??s??`outlined`:r;let f=e.includes(d);return[d,f]};export{o as t};

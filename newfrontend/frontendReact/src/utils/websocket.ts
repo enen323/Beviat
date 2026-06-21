@@ -1,24 +1,28 @@
-import { Client, type IMessage } from '@stomp/stompjs'
+import { Client } from '@stomp/stompjs'
 import SockJS from 'sockjs-client/dist/sockjs'
-import { useUserStore } from '@/stores/user'
+import { emit } from './messageBus'
+
+const RECONNECT_DELAY = 5000
+const HEARTBEAT_INTERVAL = 10000
 
 let stompClient: Client | null = null
-const subscriptions = new Map<string, { id: string; callback: (msg: IMessage) => void }>()
+let currentUserId: number | null = null
+let globalSubscriptionId: string | null = null
 
-/** 连接 WebSocket */
-export function connectWebSocket(): Promise<void> {
+/** Init WebSocket connection (singleton — safe to call multiple times) */
+export function initWebSocket(token: string, userId: number): Promise<void> {
+  if (stompClient?.active && currentUserId === userId) {
+    return Promise.resolve()
+  }
+
+  // If switching user or re-initializing, destroy old first
+  if (stompClient) {
+    destroyWebSocket()
+  }
+
+  currentUserId = userId
+
   return new Promise((resolve, reject) => {
-    const { token } = useUserStore.getState()
-    if (!token) {
-      reject(new Error('未登录'))
-      return
-    }
-
-    if (stompClient?.active) {
-      resolve()
-      return
-    }
-
     stompClient = new Client({
       webSocketFactory: () => new SockJS('/api/v1/ws'),
       connectHeaders: {
@@ -27,17 +31,16 @@ export function connectWebSocket(): Promise<void> {
       debug: (str) => {
         console.log('[STOMP]', str)
       },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 10000,
-      heartbeatOutgoing: 10000,
+      reconnectDelay: RECONNECT_DELAY,
+      heartbeatIncoming: HEARTBEAT_INTERVAL,
+      heartbeatOutgoing: HEARTBEAT_INTERVAL,
       onConnect: () => {
         console.log('[STOMP] 连接成功')
-        resubscribeAll()
+        subscribeGlobal()
         resolve()
       },
       onStompError: (frame) => {
-        console.error('[STOMP] 错误:', frame.headers['message'])
-        console.error('[STOMP] 详情:', frame.body)
+        console.error('[STOMP] 错误:', frame.headers['message'], frame.body)
         reject(new Error(frame.headers['message'] || 'STOMP error'))
       },
       onWebSocketClose: () => {
@@ -49,71 +52,49 @@ export function connectWebSocket(): Promise<void> {
   })
 }
 
-/** 订阅用户点对点消息 */
-export function subscribeUserMessages(
-  userId: number,
-  callback: (msg: any) => void
-): void {
-  const destination = `/user/${userId}/queue/messages`
-  const key = `user-msg-${userId}`
-
-  if (subscriptions.has(key)) {
+/** Subscribe to own user messages globally */
+function subscribeGlobal() {
+  if (!stompClient?.active || !currentUserId) {
+    console.warn('[STOMP] subscribeGlobal 失败: 客户端未激活或未登录')
     return
   }
 
-  subscriptions.set(key, {
-    id: '',
-    callback: (msg: IMessage) => {
-      try {
-        const data = JSON.parse(msg.body)
-        callback(data)
-      } catch (e) {
-        console.error('[STOMP] 解析消息失败:', e)
-      }
-    },
+  const destination = `/queue/messages/${currentUserId}`
+  console.log('[STOMP] 正在订阅:', destination)
+
+  const sub = stompClient.subscribe(destination, (msg) => {
+    console.log('[STOMP] 收到消息! body:', msg.body)
+    console.log('[STOMP] 消息 headers:', msg.headers)
+    try {
+      const data = JSON.parse(msg.body)
+      console.log('[STOMP] 解析成功:', data)
+      emit('new-chat-message', { msg: data, currentUserId })
+      console.log('[STOMP] 已 emit new-chat-message 事件')
+    } catch (e) {
+      console.error('[STOMP] 解析消息失败:', e)
+    }
   })
 
-  if (stompClient?.active) {
-    doSubscribe(key, destination)
+  globalSubscriptionId = sub.id
+  console.log('[STOMP] 已订阅全局消息推送, subscription id:', sub.id)
+  console.log('[STOMP] 当前 currentUserId:', currentUserId)
+}
+
+/** Destroy WebSocket connection */
+export function destroyWebSocket() {
+  globalSubscriptionId = null
+  currentUserId = null
+  if (stompClient) {
+    try {
+      stompClient.deactivate()
+    } catch {
+      // ignore deactivate errors
+    }
+    stompClient = null
   }
 }
 
-function doSubscribe(key: string, destination: string) {
-  const sub = subscriptions.get(key)
-  if (!sub || !stompClient?.active) return
-
-  const stompSub = stompClient.subscribe(destination, sub.callback)
-  sub.id = stompSub.id
-}
-
-function resubscribeAll() {
-  for (const [key, sub] of subscriptions) {
-    const userId = key.replace('user-msg-', '')
-    const destination = `/user/${userId}/queue/messages`
-    doSubscribe(key, destination)
-  }
-}
-
-/** 取消订阅 */
-export function unsubscribeUserMessages(userId: number) {
-  const key = `user-msg-${userId}`
-  const sub = subscriptions.get(key)
-  if (sub && stompClient?.active) {
-    stompClient.unsubscribe(sub.id)
-  }
-  subscriptions.delete(key)
-}
-
-/** 断开连接 */
-export function disconnectWebSocket() {
-  if (stompClient?.active) {
-    stompClient.deactivate()
-  }
-  subscriptions.clear()
-  stompClient = null
-}
-
-/** 获取连接状态 */
-export function isConnected(): boolean {
+/** Check if connected */
+export function isWsConnected(): boolean {
   return stompClient?.active ?? false
 }

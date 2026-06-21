@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Avatar, Tag, Button, Steps, Spin, Empty, message, Modal } from 'antd'
 import {
@@ -9,7 +9,7 @@ import {
   DollarOutlined,
   CloseOutlined,
 } from '@ant-design/icons'
-import { orderApi, locationApi, type Order } from '@/api'
+import { orderApi, type Order } from '@/api'
 import { useUserStore } from '@/stores/user'
 import AmapComponent from '@/components/AmapComponent'
 import './OrderDetail.scss'
@@ -86,8 +86,8 @@ export default function OrderDetail() {
     })
   }
 
-  // 卖家确认接单后即可显示地图（status >= 2 且有位置数据）
-  const showMap = order.status >= 2 && mapMarkers.length > 0
+  // 卖家确认接单后即可显示地图（status >= 1 且有位置数据）
+  const showMap = order.status >= 1 && mapMarkers.length > 0
 
   const handlePay = async () => {
     setActionLoading(true)
@@ -226,12 +226,12 @@ export default function OrderDetail() {
           </div>
         </div>
 
-        {/* 收货信息 */}
+        {/* 收货信息（买家信息） */}
         <div className="order-receiver glass-card">
-          <h3>收货信息</h3>
+          <h3>买家信息</h3>
           <div className="receiver-row">
-            <span className="label">收货人</span>
-            <span>{order.receiverName || '-'}</span>
+            <span className="label">买家</span>
+            <span>{order.receiverName || order.buyerName || '-'}</span>
           </div>
           <div className="receiver-row">
             <span className="label">手机号</span>
@@ -239,7 +239,7 @@ export default function OrderDetail() {
           </div>
           <div className="receiver-row">
             <span className="label">地址</span>
-            <span>{order.receiverAddress || '-'}</span>
+            <span>{order.receiverAddress || order.buyerAddress || '-'}</span>
           </div>
           {order.remark && (
             <div className="receiver-row">
@@ -249,16 +249,17 @@ export default function OrderDetail() {
           )}
         </div>
 
-        {/* 地图区域 - 卖家确认后显示双方位置 */}
+        {/* 地图区域 - 卖家确认后显示位置 */}
         {showMap && (
           <div className="order-map glass-card">
-            <h3><EnvironmentOutlined /> 双方位置</h3>
+            <h3><EnvironmentOutlined /> {mapMarkers.length > 1 ? '双方位置' : mapMarkers[0]?.role === 'buyer' ? '买家位置' : '卖家位置'}</h3>
             <AmapComponent
               height={350}
               markers={mapMarkers}
               showSearch={false}
               showGeolocation={false}
               pickable={false}
+              showRoute={mapMarkers.length >= 2}
             />
           </div>
         )}

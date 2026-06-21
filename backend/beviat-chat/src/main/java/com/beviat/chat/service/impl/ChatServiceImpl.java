@@ -6,7 +6,10 @@ import com.beviat.chat.dto.ChatMessageDTO;
 import com.beviat.chat.mapper.ChatMessageMapper;
 import com.beviat.chat.service.ChatService;
 import com.beviat.chat.vo.ChatMessageVO;
+import com.beviat.chat.vo.ConversationVO;
 import com.beviat.common.domain.ChatMessage;
+import com.beviat.common.domain.User;
+import com.beviat.system.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +28,7 @@ public class ChatServiceImpl implements ChatService {
 
     private final ChatMessageMapper chatMessageMapper;
     private final SimpMessagingTemplate messagingTemplate; // WebSocket消息推送模板
+    private final UserMapper userMapper;
 
     @Override
     public ChatMessageVO sendMessage(Long senderId, ChatMessageDTO dto) {
@@ -43,11 +47,10 @@ public class ChatServiceImpl implements ChatService {
         // 2. 构建VO
         ChatMessageVO vo = toVO(msg);
 
-        // 3. 通过WebSocket实时推送给接收者（点对点消息）
+        // 3. 通过WebSocket实时推送给接收者（直接队列，绕过UserDestinationMessageHandler）
         try {
-            messagingTemplate.convertAndSendToUser(
-                    String.valueOf(dto.getReceiverId()),
-                    "/queue/messages",
+            messagingTemplate.convertAndSend(
+                    "/queue/messages/" + dto.getReceiverId(),
                     vo
             );
             log.debug("WebSocket消息推送成功: to={}", dto.getReceiverId());
@@ -78,9 +81,8 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<Object> getChatList(Long currentUserId) {
-        // TODO: 实现最近会话列表（按最后一条消息时间排序，含未读数）
-        return List.of();
+    public List<ConversationVO> getChatList(Long currentUserId) {
+        return chatMessageMapper.selectConversations(currentUserId);
     }
 
     @Override
@@ -93,7 +95,7 @@ public class ChatServiceImpl implements ChatService {
         return chatMessageMapper.getUnreadCount(userId);
     }
 
-    /** 实体 -> VO */
+    /** 实体 -> VO（附带用户信息） */
     private ChatMessageVO toVO(ChatMessage msg) {
         ChatMessageVO vo = new ChatMessageVO();
         vo.setId(msg.getId());
@@ -104,6 +106,20 @@ public class ChatServiceImpl implements ChatService {
         vo.setProductId(msg.getProductId());
         vo.setIsRead(msg.getIsRead() == 1);
         vo.setCreatedAt(msg.getCreatedAt());
+
+        // 填充发送者信息
+        if (msg.getSenderId() != null) {
+            try {
+                User sender = userMapper.selectById(msg.getSenderId());
+                if (sender != null) {
+                    vo.setSenderNickname(sender.getNickname());
+                    vo.setSenderAvatar(sender.getAvatar());
+                }
+            } catch (Exception ignored) {
+                // 容错
+            }
+        }
+
         return vo;
     }
 }

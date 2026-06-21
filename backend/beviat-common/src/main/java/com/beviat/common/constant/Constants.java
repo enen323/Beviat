@@ -16,6 +16,8 @@ public class Constants {
     public static final String REDIS_TOKEN_PREFIX = "beviat:token:";
     public static final String REDIS_BLACKLIST_PREFIX = "beviat:blacklist:";
     public static final String REDIS_BROWSE_HISTORY_PREFIX = "beviat:browse:";
+    public static final String REDIS_VERIFY_CODE_PREFIX = "beviat:verify:";
+    public static final String REDIS_RESET_TOKEN_PREFIX = "beviat:reset:";
 
     /** 用户状态 */
     public static final int USER_STATUS_NORMAL = 0;

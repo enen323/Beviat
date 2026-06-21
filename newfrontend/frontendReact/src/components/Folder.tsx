@@ -118,10 +118,10 @@ const Folder: React.FC<FolderProps> = ({ items, defaultActiveKey = [] }) => {
                       onMouseLeave={() => handlePaperMouseLeave(item.key, i)}
                       style={
                         isOpen
-                          ? {
+                          ? ({
                               '--magnet-x': `${offsets[i]?.x || 0}px`,
                               '--magnet-y': `${offsets[i]?.y || 0}px`,
-                            }
+                            } as React.CSSProperties)
                           : {}
                       }
                     >

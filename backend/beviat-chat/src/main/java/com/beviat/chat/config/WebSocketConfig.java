@@ -22,8 +22,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.enableSimpleBroker("/topic", "/queue");
         // 设置客户端发送消息的前缀
         config.setApplicationDestinationPrefixes("/app");
-        // 用户点对点消息前缀
-        config.setUserDestinationPrefix("/user");
+        // 用户点对点消息前缀（必须尾部斜杠，否则 convertAndSendToUser 生成 /user{id} 而非 /user/{id}）
+        config.setUserDestinationPrefix("/user/");
     }
 
     @Override

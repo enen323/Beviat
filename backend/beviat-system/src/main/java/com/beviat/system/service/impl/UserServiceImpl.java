@@ -210,6 +210,67 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String forgotPassword(ForgotPasswordDTO dto) {
+        // 1. 根据用户名查询用户
+        User user = userMapper.selectOne(
+                new LambdaQueryWrapper<User>()
+                        .eq(User::getUsername, dto.getUsername())
+                        .eq(User::getDeleted, 0)
+        );
+        if (user == null) {
+            throw new BizException("用户名不存在");
+        }
+
+        // 2. 验证手机号是否匹配
+        if (!dto.getPhone().equals(user.getPhone())) {
+            throw new BizException("手机号与注册手机号不一致");
+        }
+
+        // 3. 验证验证码（暂固定为123456，待接入短信服务后改为从Redis中取）
+        if (!"123456".equals(dto.getVerifyCode())) {
+            throw new BizException("验证码错误");
+        }
+
+        // 4. 验证通过，生成重置凭证并存入Redis（5分钟有效）
+        String resetToken = UUID.randomUUID().toString(true);
+        redisTemplate.opsForValue().set(
+                Constants.REDIS_RESET_TOKEN_PREFIX + resetToken,
+                String.valueOf(user.getId()),
+                Duration.ofMinutes(5)
+        );
+
+        log.info("忘记密码验证通过，已生成重置凭证: username={}", dto.getUsername());
+        return resetToken;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void resetPassword(ResetPasswordDTO dto) {
+        // 1. 验证重置凭证
+        String userIdStr = redisTemplate.opsForValue().get(Constants.REDIS_RESET_TOKEN_PREFIX + dto.getResetToken());
+        if (userIdStr == null) {
+            throw new BizException("重置凭证无效或已过期，请重新验证");
+        }
+
+        Long userId = Long.valueOf(userIdStr);
+
+        // 2. 查询用户
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BizException("用户不存在");
+        }
+
+        // 3. 更新密码（BCrypt加密）
+        user.setPassword(BCrypt.hashpw(dto.getNewPassword()));
+        userMapper.updateById(user);
+
+        // 4. 删除已使用的重置凭证
+        redisTemplate.delete(Constants.REDIS_RESET_TOKEN_PREFIX + dto.getResetToken());
+
+        log.info("密码重置成功: userId={}", userId);
+    }
+
+    @Override
     public String uploadAvatar(Long userId, MultipartFile file) {
         if (file.isEmpty()) {
             throw new BizException("请选择要上传的头像文件");

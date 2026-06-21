@@ -1,10 +1,7 @@
 package com.beviat.system.service;
 
 import com.beviat.common.domain.User;
-import com.beviat.system.dto.LoginDTO;
-import com.beviat.system.dto.RegisterDTO;
-import com.beviat.system.dto.TokenVO;
-import com.beviat.system.dto.UserUpdateDTO;
+import com.beviat.system.dto.*;
 import com.beviat.system.vo.UserVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,4 +33,10 @@ public interface UserService {
 
     /** 上传用户头像，返回头像URL */
     String uploadAvatar(Long userId, MultipartFile file);
+
+    /** 忘记密码：验证用户身份，返回重置凭证 */
+    String forgotPassword(ForgotPasswordDTO dto);
+
+    /** 重置密码：通过重置凭证设置新密码 */
+    void resetPassword(ResetPasswordDTO dto);
 }

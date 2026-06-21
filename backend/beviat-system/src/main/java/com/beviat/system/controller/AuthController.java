@@ -58,6 +58,20 @@ public class AuthController {
         return R.ok("退出成功", null);
     }
 
+    @Operation(summary = "忘记密码")
+    @PostMapping("/forgot-password")
+    public R<String> forgotPassword(@Valid @RequestBody ForgotPasswordDTO dto) {
+        String resetToken = userService.forgotPassword(dto);
+        return R.ok("身份验证通过", resetToken);
+    }
+
+    @Operation(summary = "重置密码")
+    @PostMapping("/reset-password")
+    public R<Void> resetPassword(@Valid @RequestBody ResetPasswordDTO dto) {
+        userService.resetPassword(dto);
+        return R.ok("密码重置成功", null);
+    }
+
     /** 从JWT拦截器设置的ThreadLocal获取当前用户ID */
     private Long getCurrentUserId() {
         Long userId = RequestContextHolder.getCurrentUserId();

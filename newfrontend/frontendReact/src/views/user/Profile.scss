@@ -233,6 +233,71 @@
     }
   }
 
+  // ========== Auction Mini List ==========
+  .auction-mini-list {
+    .auction-mini-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: translateX(4px);
+      }
+
+      .auction-mini-image {
+        width: 52px;
+        height: 52px;
+        border-radius: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .auction-mini-info {
+        flex: 1;
+        min-width: 0;
+
+        h4 {
+          margin: 0 0 4px;
+          font-size: 14px;
+          font-weight: 600;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .auction-mini-meta {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
+          color: #ff4d4f;
+          font-weight: 500;
+        }
+      }
+
+      .auction-mini-arrow {
+        font-size: 16px;
+        color: #ccc;
+      }
+    }
+  }
+
+  .folder-loading {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+  }
+
   // ========== Browse History ==========
   .browse-history-section {
     .browse-history-header {

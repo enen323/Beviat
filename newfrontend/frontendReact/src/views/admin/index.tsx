@@ -5,7 +5,7 @@ import {
   DeleteOutlined,
   ShoppingOutlined,
   UserOutlined,
-  AuctionOutlined,
+  DollarOutlined,
   FormOutlined,
   ExclamationCircleOutlined,
 } from '@ant-design/icons'
@@ -342,7 +342,7 @@ const Admin: React.FC = () => {
       key: 'auctions',
       label: (
         <span>
-          <AuctionOutlined /> 拍卖管理
+          <DollarOutlined /> 拍卖管理
         </span>
       ),
       children: (

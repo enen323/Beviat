@@ -60,11 +60,6 @@ const Register: React.FC = () => {
   }
 
   const handleRegister = async () => {
-    if (!formData.agreeTerms) {
-      message.warning('请先同意用户协议和隐私政策')
-      return
-    }
-
     setLoading(true)
     try {
       await userApi.register({

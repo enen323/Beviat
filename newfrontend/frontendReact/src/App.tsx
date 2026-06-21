@@ -1,29 +1,64 @@
-import { RouterProvider, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
+import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
+import { useUserStore } from './stores/user'
+import { useChatStore } from './stores/chat'
+import { initWebSocket, destroyWebSocket } from './utils/websocket'
+import { on } from './utils/messageBus'
+import { chatApi } from './api'
 
-function TitleUpdater() {
-  const location = useLocation()
+/** Manages global WebSocket lifecycle based on auth state */
+function WebSocketManager() {
+  const { token, userId, isLoggedIn } = useUserStore()
+  const addIncomingMessage = useChatStore((s) => s.addIncomingMessage)
+  const incrementUnread = useChatStore((s) => s.incrementUnread)
+
   useEffect(() => {
-    // Find the matching route and set the title
-    const routes = router.routes || []
-    const currentRoute = routes.find((r: any) => {
-      if (r.path === '*') return false
-      if (r.path === location.pathname) return true
-      // Handle dynamic routes
-      if (r.path?.includes(':')) {
-        const regex = new RegExp('^' + r.path.replace(/:[^/]+/g, '[^/]+') + '$')
-        return regex.test(location.pathname)
-      }
-      return false
+    if (!isLoggedIn || !token || !userId) {
+      destroyWebSocket()
+      return
+    }
+
+    initWebSocket(token, userId).catch((err) => {
+      console.warn('[WS] init failed:', err)
     })
-    document.title = (currentRoute as any)?.handle?.title || 'Beviat - 校园二手交易平台'
-  }, [location])
+
+    return () => {
+      destroyWebSocket()
+    }
+  }, [isLoggedIn, token, userId])
+
+  // Listen for incoming messages globally
+  useEffect(() => {
+    const unsub = on('new-chat-message', ({ msg, currentUserId }) => {
+      // Receiver gets the message — increment unread
+      if (msg.receiverId === currentUserId) {
+        addIncomingMessage(msg)
+        incrementUnread()
+      }
+    })
+    return unsub
+  }, [addIncomingMessage, incrementUnread])
+
+  // Fetch initial unread count
+  useEffect(() => {
+    if (!isLoggedIn || !userId) return
+    chatApi.getConversations().then((convs) => {
+      const total = convs.reduce((sum, c) => sum + (c.unreadCount || 0), 0)
+      useChatStore.getState().setUnreadCount(total)
+    }).catch(() => {})
+  }, [isLoggedIn, userId])
+
   return null
 }
 
 function App() {
-  return <RouterProvider router={router} />
+  return (
+    <>
+      <WebSocketManager />
+      <RouterProvider router={router} />
+    </>
+  )
 }
 
 export default App

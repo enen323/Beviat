@@ -4,7 +4,8 @@ import { Avatar, Input, Button, message as antMessage } from 'antd'
 import { SendOutlined, ArrowLeftOutlined } from '@ant-design/icons'
 import { chatApi, type Message } from '@/api'
 import { useUserStore } from '@/stores/user'
-import { connectWebSocket, subscribeUserMessages, unsubscribeUserMessages } from '@/utils/websocket'
+import { useChatStore } from '@/stores/chat'
+import { on } from '@/utils/messageBus'
 import './Detail.scss'
 
 const ChatDetail: React.FC = () => {
@@ -28,14 +29,15 @@ const ChatDetail: React.FC = () => {
     }
   }, [])
 
+  // Load messages and listen for new ones via global message bus
   useEffect(() => {
     if (!targetUserId) return
-
     if (!currentUserId) {
       console.error('未获取到当前用户ID，无法建立聊天')
       return
     }
 
+    // Load conversation info + history
     Promise.all([
       chatApi.getConversations(),
       chatApi.getMessages(targetUserId, 1, 100),
@@ -45,34 +47,49 @@ const ChatDetail: React.FC = () => {
         if (conv) {
           setPeerName(conv.peerName)
           setPeerAvatar(conv.peerAvatar)
-          chatApi.markAsRead(targetUserId)
+          chatApi.markAsRead(targetUserId).then(() => {
+            useChatStore.getState().refetchUnreadCount()
+          }).catch(() => {})
         }
         setMessages(msgs.records || [])
         setTimeout(scrollToBottom, 0)
       })
       .catch((error) => console.error('Failed to load chat:', error))
 
-    connectWebSocket()
-      .then(() => {
-        subscribeUserMessages(currentUserId, (msg: any) => {
-          const normalized: Message = {
-            ...msg,
-            type: msg.type || (msg.messageType === 2 ? 'image' : msg.messageType === 3 ? 'product' : 'text'),
-          }
-          if (normalized.senderId === targetUserId || normalized.receiverId === targetUserId) {
-            setMessages((prev) => {
-              const exists = prev.some((m) => m.id === normalized.id)
-              if (exists) return prev
-              setTimeout(scrollToBottom, 0)
-              return [...prev, normalized]
-            })
-          }
-        })
+    // Listen for incoming messages via global WebSocket
+    const unsub = on('new-chat-message', ({ msg, currentUserId }) => {
+      console.log('[ChatDetail] 收到 new-chat-message, targetUserId=', targetUserId, 'msg:', msg, 'currentUserId=', currentUserId)
+
+      // Only process messages related to current conversation
+      if (msg.senderId !== targetUserId && msg.receiverId !== targetUserId) {
+        console.log('[ChatDetail] 跳过: 不属于当前会话')
+        return
+      }
+
+      const normalized: Message = {
+        ...msg,
+        type: msg.type || (msg.messageType === 2 ? 'image' : msg.messageType === 3 ? 'product' : 'text'),
+      }
+
+      console.log('[ChatDetail] 添加到消息列表:', normalized)
+      setMessages((prev) => {
+        const exists = prev.some((m) => m.id === normalized.id)
+        if (exists) {
+          console.log('[ChatDetail] 已存在，跳过')
+          return prev
+        }
+        setTimeout(scrollToBottom, 0)
+        return [...prev, normalized]
       })
-      .catch((error) => console.error('WebSocket 连接失败:', error))
+
+      // Mark as read if from peer
+      if (msg.senderId === targetUserId) {
+        chatApi.markAsRead(targetUserId).catch(() => {})
+      }
+    })
 
     return () => {
-      unsubscribeUserMessages(currentUserId)
+      unsub()
     }
   }, [targetUserId, currentUserId, scrollToBottom])
 
@@ -119,7 +136,7 @@ const ChatDetail: React.FC = () => {
               className={`message-row ${msg.senderId === currentUserId ? 'mine' : 'theirs'}`}
             >
               {msg.senderId !== currentUserId && (
-                <Avatar size={36} src={peerAvatar} className="msg-avatar" />
+                <Avatar size={36} src={msg.senderAvatar || peerAvatar || null} className="msg-avatar" />
               )}
               <div className="msg-bubble">
                 {msg.type === 'text' && <div className="msg-text">{msg.content}</div>}
@@ -142,7 +159,7 @@ const ChatDetail: React.FC = () => {
                 )}
               </div>
               {msg.senderId === currentUserId && (
-                <Avatar size={36} src={currentUserAvatar} className="msg-avatar" />
+                <Avatar size={36} src={msg.senderAvatar || currentUserAvatar || null} className="msg-avatar" />
               )}
             </div>
           ))}

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.beviat.chat.dto.ChatMessageDTO;
 import com.beviat.chat.service.ChatService;
 import com.beviat.chat.vo.ChatMessageVO;
+import com.beviat.chat.vo.ConversationVO;
 import com.beviat.common.result.R;
 import com.beviat.common.util.RequestContextHolder;
 
@@ -34,7 +35,7 @@ public class ChatController {
 
     @Operation(summary = "获取聊天列表（最近会话）")
     @GetMapping
-    public R<List<Object>> getChatList() {
+    public R<List<ConversationVO>> getChatList() {
         Long userId = RequestContextHolder.getCurrentUserId();
         if (userId == null) userId = 1L;
         return R.ok(chatService.getChatList(userId));

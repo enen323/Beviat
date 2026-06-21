@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Input, message } from 'antd'
+import { Input } from 'antd'
 import { EnvironmentOutlined, SearchOutlined } from '@ant-design/icons'
 import './AmapComponent.scss'
 
@@ -26,6 +26,8 @@ interface AmapComponentProps {
   markers?: Array<{ lng: number; lat: number; label?: string; color?: string; role?: 'buyer' | 'seller' }>
   /** 定位成功回调 */
   onLocated?: (location: { lng: number; lat: number; address: string }) => void
+  /** 是否显示路线规划（需至少2个标记点） */
+  showRoute?: boolean
 }
 
 // 声明全局AMap类型
@@ -46,13 +48,12 @@ export default function AmapComponent({
   onLocationPick,
   markers = [],
   onLocated,
+  showRoute = false,
 }: AmapComponentProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<any>(null)
-  const searchInputRef = useRef<any>(null)
   const [searchValue, setSearchValue] = useState('')
   const [myLocation, setMyLocation] = useState<{ lng: number; lat: number; address: string } | null>(null)
-  const [mapLoaded, setMapLoaded] = useState(false)
 
   // 动态加载高德地图JS API
   const loadAMapScript = () => {
@@ -85,7 +86,6 @@ export default function AmapComponent({
         center: center ? new window.AMap.LngLat(center[0], center[1]) : undefined,
       })
       mapRef.current = map
-      setMapLoaded(true)
 
       // 定位插件
       if (showGeolocation) {
@@ -184,10 +184,10 @@ export default function AmapComponent({
     }
   }, [])
 
-  // 更新标记点
+  // 更新标记点和路线规划
   useEffect(() => {
     if (!mapRef.current || !window.AMap) return
-    // 清除旧标记
+    // 清除旧标记和路线
     const map = mapRef.current
     map.clearMap()
 
@@ -215,11 +215,36 @@ export default function AmapComponent({
       map.add(marker)
     })
 
+    // 路线规划：当 showRoute 且有至少2个标记点时，规划骑行路线
+    if (showRoute && markers.length >= 2) {
+      window.AMap.plugin('AMap.Riding', () => {
+        const riding = new window.AMap.Riding({
+          policy: window.AMap.RidingPolicy?.LEAST_TIME,
+          map: map,
+        })
+        // 找到买家和卖家的标记点作为起终点
+        const buyerMarker = markers.find(m => m.role === 'buyer')
+        const sellerMarker = markers.find(m => m.role === 'seller')
+        if (buyerMarker && sellerMarker) {
+          // 起点为卖家，终点为买家
+          const startLngLat = [sellerMarker.lng, sellerMarker.lat]
+          const endLngLat = [buyerMarker.lng, buyerMarker.lat]
+          riding.search(startLngLat, endLngLat, (status: string, result: any) => {
+            if (status === 'complete' && result.info === 'OK') {
+              console.log('路线规划成功')
+            } else {
+              console.warn('路线规划失败:', result)
+            }
+          })
+        }
+      })
+    }
+
     // 自适应显示所有标记
     if (markers.length > 1) {
       map.setFitView()
     }
-  }, [markers])
+  }, [markers, showRoute])
 
   return (
     <div className="amap-component">

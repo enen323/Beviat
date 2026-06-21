@@ -13,9 +13,11 @@ import {
   DeleteOutlined,
   CloseOutlined,
   ShoppingCartOutlined,
+  ClockCircleOutlined,
+  FireOutlined,
 } from '@ant-design/icons'
-import { userApi, browseHistoryApi } from '@/api'
-import type { User, Product } from '@/api'
+import { userApi, browseHistoryApi, auctionApi } from '@/api'
+import type { User, Product, Auction as AuctionType } from '@/api'
 import { useUserStore } from '@/stores/user'
 import Folder from '@/components/Folder'
 import './Profile.scss'
@@ -23,7 +25,7 @@ import './Profile.scss'
 const UserProfile: React.FC = () => {
   const { id } = useParams<{ id?: string }>()
   const navigate = useNavigate()
-  const { userInfo: currentUser, isLoggedIn, userId: currentUserId } = useUserStore()
+  const { isLoggedIn, userId: currentUserId } = useUserStore()
 
   const isSelf = !id || (currentUserId && Number(id) === currentUserId)
   const targetUserId = id ? Number(id) : currentUserId
@@ -33,6 +35,8 @@ const UserProfile: React.FC = () => {
   const [soldProducts, setSoldProducts] = useState<Product[]>([])
   const [favorites, setFavorites] = useState<Product[]>([])
   const [browseHistory, setBrowseHistory] = useState<Product[]>([])
+  const [myAuctions, setMyAuctions] = useState<AuctionType[]>([])
+  const [auctionLoading, setAuctionLoading] = useState(false)
   const [loading, setLoading] = useState(true)
   const [isFollowing, setIsFollowing] = useState(false)
 
@@ -73,8 +77,23 @@ const UserProfile: React.FC = () => {
         // handled
       }
     }
-    if (!loading && isSelf) fetchTabData()
+    if (!loading && isSelf) {
+      fetchTabData()
+      fetchMyAuctions()
+    }
   }, [loading, isSelf])
+
+  const fetchMyAuctions = async () => {
+    setAuctionLoading(true)
+    try {
+      const res = await auctionApi.getMyAuctions({ page: 1, size: 50 })
+      setMyAuctions(res.records || [])
+    } catch {
+      // handled
+    } finally {
+      setAuctionLoading(false)
+    }
+  }
 
   const handleFollow = async () => {
     if (!targetUserId || !isLoggedIn) {
@@ -217,6 +236,55 @@ const UserProfile: React.FC = () => {
     )
   }
 
+  const statusLabel = (status: string) => {
+    switch (status) {
+      case 'ongoing': return '进行中'
+      case 'ended': return '已结束'
+      case 'cancelled': return '已取消'
+      default: return status
+    }
+  }
+
+  const statusColor = (status: string) => {
+    switch (status) {
+      case 'ongoing': return 'green'
+      case 'ended': return 'default'
+      case 'cancelled': return 'red'
+      default: return 'default'
+    }
+  }
+
+  const renderAuctionList = () => {
+    if (auctionLoading) return <div className="folder-loading"><Spin /></div>
+    if (myAuctions.length === 0) return <Empty description="暂无拍卖记录" className="folder-empty" />
+    return (
+      <div className="auction-mini-list">
+        {myAuctions.map((auction) => (
+          <div
+            key={auction.id}
+            className="auction-mini-card glass-card"
+            onClick={() => navigate(`/auction/${auction.id}`)}
+          >
+            <div className="auction-mini-image">
+              <img src={auction.product?.coverImage || auction.product?.images?.[0] || ''} alt={auction.product?.title} />
+            </div>
+            <div className="auction-mini-info">
+              <h4>{auction.product?.title}</h4>
+              <div className="auction-mini-meta">
+                <span>当前 ¥{auction.currentPrice}</span>
+                <Tag color={statusColor(auction.status)}>{statusLabel(auction.status)}</Tag>
+              </div>
+            </div>
+            <FireOutlined className="auction-mini-arrow" />
+          </div>
+        ))}
+        <Button type="link" block onClick={() => navigate('/auction?status=my')}>
+          查看全部拍卖 →
+        </Button>
+      </div>
+    )
+  }
+
   const folderItems = [
     {
       key: 'orders',
@@ -232,6 +300,16 @@ const UserProfile: React.FC = () => {
         </div>
       ),
     },
+    ...(isSelf
+      ? [{
+          key: 'auctions',
+          label: '我的拍卖',
+          icon: <ClockCircleOutlined />,
+          count: myAuctions.length,
+          color: '#FF6B35',
+          children: renderAuctionList(),
+        }]
+      : []),
     {
       key: 'products',
       label: '在售商品',

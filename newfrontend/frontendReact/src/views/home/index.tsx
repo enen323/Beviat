@@ -3,16 +3,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Radio, Avatar, Button } from 'antd'
 import { StarOutlined, LoadingOutlined } from '@ant-design/icons'
 import { BookOpen, Smartphone, Home, Dumbbell, Shirt, Sparkles, Cake, Package } from 'lucide-react'
-import { productApi, type Product } from '@/api'
+import { productApi, auctionApi, type Product, type Auction } from '@/api'
 import StaggeredMenu from '@/components/StaggeredMenu'
 import SplitText from '@/components/SplitText'
 import InfiniteMenu from '@/components/InfiniteMenu'
 import './index.scss'
-
-const conditionText = (level: number): string => {
-  const map: Record<number, string> = { 1: '全新', 99: '几乎全新', 95: '轻微使用', 90: '明显使用', 80: '有瑕疵' }
-  return map[level] || '其他'
-}
 
 const categories = [
   { id: 1, name: '书籍资料', icon: <BookOpen />, color: '#3B82F6' },
@@ -43,6 +38,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
+  const [hotAuctions, setHotAuctions] = useState<Auction[]>([])
 
   const heroSectionRef = useRef<HTMLElement>(null)
   const productsSectionRef = useRef<HTMLElement>(null)
@@ -62,9 +58,10 @@ export default function HomePage() {
     setKeyword(kw || undefined)
   }, [searchParams])
 
-  // Load recommendations on mount
+  // Load recommendations & hot auctions on mount
   useEffect(() => {
     loadRecommendations()
+    loadHotAuctions()
   }, [])
 
   // Reload products when category, keyword, or sortBy changes
@@ -113,6 +110,15 @@ export default function HomePage() {
       setRecommendations(data)
     } catch {
       setRecommendations([])
+    }
+  }
+
+  async function loadHotAuctions() {
+    try {
+      const res = await auctionApi.list({ status: 0, page: 1, size: 4 })
+      setHotAuctions(res.records || [])
+    } catch {
+      setHotAuctions([])
     }
   }
 
@@ -226,6 +232,47 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Hot Auctions Section */}
+      {hotAuctions.length > 0 && (
+        <section className="auction-section section-dark">
+          <div className="section-inner">
+            <div className="section-header">
+              <h2 className="section-title">🔥 热门拍卖</h2>
+              <a className="section-more" onClick={() => navigate('/auction')}>
+                查看全部 →
+              </a>
+            </div>
+            <div className="auction-home-grid">
+              {hotAuctions.map((auction) => (
+                <div
+                  key={auction.id}
+                  className="auction-home-card glass-card"
+                  onClick={() => navigate(`/auction/${auction.id}`)}
+                >
+                  <div className="auction-home-image">
+                    <img
+                      src={auction.product?.coverImage || auction.product?.images?.[0] || ''}
+                      alt={auction.product?.title}
+                    />
+                    <span className="auction-home-badge">拍卖中</span>
+                  </div>
+                  <div className="auction-home-body">
+                    <h3 className="auction-home-title">{auction.product?.title}</h3>
+                    <div className="auction-home-price">
+                      <span className="current">¥{auction.currentPrice}</span>
+                      <span className="start">起拍 ¥{auction.startPrice}</span>
+                    </div>
+                    <div className="auction-home-meta">
+                      <span>{auction.bidCount} 次出价</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Latest Products Section */}
       <section ref={productsSectionRef} className="products-section section-light">

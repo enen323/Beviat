@@ -1,0 +1,120 @@
+.auction-create-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px;
+
+  .create-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: background 0.2s;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.06);
+      }
+    }
+  }
+
+  .create-loading {
+    display: flex;
+    justify-content: center;
+    padding: 60px 0;
+  }
+
+  .product-option {
+    display: flex;
+    align-items: center;
+  }
+
+  .product-option-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .product-option-title {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .product-option-price {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .selected-product-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+    background: rgba(0, 113, 227, 0.06);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 113, 227, 0.15);
+
+    .preview-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .preview-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .preview-price {
+      font-size: 13px;
+      color: #ff4d4f;
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 16px;
+
+    .form-half {
+      flex: 1;
+    }
+  }
+
+  .form-tips {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .submit-btn {
+    height: 48px;
+    font-size: 16px;
+    border-radius: 12px;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px 12px;
+
+    .form-row {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+}

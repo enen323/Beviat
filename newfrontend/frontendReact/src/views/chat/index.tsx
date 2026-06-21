@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { Avatar, Spin } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { chatApi, type Conversation } from '@/api'
+import { useUserStore } from '@/stores/user'
+import { useChatStore } from '@/stores/chat'
+import { on } from '@/utils/messageBus'
 import './index.scss'
 
 function formatTime(timeStr: string): string {
@@ -20,6 +23,8 @@ function formatTime(timeStr: string): string {
 
 const ChatPage: React.FC = () => {
   const navigate = useNavigate()
+  const { userId } = useUserStore()
+  const { setUnreadCount } = useChatStore()
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -27,10 +32,41 @@ const ChatPage: React.FC = () => {
     setLoading(true)
     chatApi
       .getConversations()
-      .then((data) => setConversations(data))
+      .then((data) => {
+        setConversations(data)
+        const total = data.reduce((sum, c) => sum + (c.unreadCount || 0), 0)
+        setUnreadCount(total)
+      })
       .catch((error) => console.error('Failed to load conversations:', error))
       .finally(() => setLoading(false))
-  }, [])
+  }, [setUnreadCount])
+
+  // Listen for new messages to reorder conversations in real-time
+  useEffect(() => {
+    const unsub = on('new-chat-message', ({ msg }) => {
+      setConversations((prev) => {
+        const idx = prev.findIndex((c) => c.peerId === msg.senderId || c.peerId === msg.receiverId)
+        let updated: Conversation[]
+
+        if (idx >= 0) {
+          // Update existing conversation
+          const conv = { ...prev[idx] }
+          conv.lastMessage = msg.content
+          conv.lastMessageTime = msg.createdAt
+          if (msg.receiverId === userId) {
+            conv.unreadCount = (conv.unreadCount || 0) + 1
+          }
+          updated = [conv, ...prev.slice(0, idx), ...prev.slice(idx + 1)]
+        } else {
+          // Unknown sender — prepend placeholder, will refresh on next load
+          updated = prev
+        }
+
+        return updated
+      })
+    })
+    return unsub
+  }, [userId])
 
   return (
     <div className="chat-page">
